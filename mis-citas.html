@@ -3,144 +3,496 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mis citas – EjeSalud</title>
+  <title>Mis Citas – EjeSalud</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="assets/css/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="assets/css/style.css" rel="stylesheet"/>
+  <style>
+    body{background:#f4f7f6;font-family:'Montserrat',sans-serif;margin:0}
+    .mc-wrapper{display:flex;min-height:100vh}
+    /* Sidebar */
+    .mc-sidebar{width:260px;background:#1a2e2c;color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:transform .3s}
+    .mc-sidebar.collapsed{transform:translateX(-260px)}
+    .sidebar-brand{padding:28px 24px 20px;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+    .sidebar-brand span{color:#7aa8a2}
+    .sidebar-badge{display:inline-block;margin-top:6px;background:rgba(122,168,162,.2);color:#7aa8a2;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+    .sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
+    .nav-section{font-size:.65rem;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.1em;padding:16px 24px 6px;text-transform:uppercase}
+    .nav-link-item{display:flex;align-items:center;gap:12px;padding:11px 24px;color:rgba(255,255,255,.65);text-decoration:none;font-size:.875rem;font-weight:500;border-left:3px solid transparent;transition:all .2s}
+    .nav-link-item:hover{color:#fff;background:rgba(122,168,162,.1)}
+    .nav-link-item.active{color:#7aa8a2;background:rgba(122,168,162,.12);border-left-color:#7aa8a2}
+    .nav-link-item i{width:18px;text-align:center;font-size:.9rem}
+    .sidebar-footer{padding:20px 24px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
+    .sf-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7aa8a2,#5b8a84);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+    .sf-name{font-size:.82rem;font-weight:600;color:#fff}
+    .sf-role{font-size:.72rem;color:rgba(255,255,255,.45)}
+    /* Main */
+    .mc-main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+    /* Topbar */
+    .mc-topbar{background:#fff;border-bottom:1px solid #e8eeed;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .mc-topbar h1{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:#1a2e2c;margin:0}
+    .mc-topbar h1 small{font-family:'Montserrat',sans-serif;font-size:.75rem;color:#888;font-weight:400;margin-left:8px}
+    .btn-nueva-cita{background:linear-gradient(135deg,#7aa8a2,#5b8a84);color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:.82rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px;transition:opacity .2s}
+    .btn-nueva-cita:hover{opacity:.88;color:#fff}
+    .btn-sidebar-toggle{display:none;background:none;border:none;font-size:1.2rem;color:#444}
+    /* Content */
+    .mc-content{padding:28px 32px;flex:1}
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+    .stat-card{background:#fff;border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.05);border-left:4px solid var(--sc,#7aa8a2)}
+    .stat-icon{width:46px;height:46px;border-radius:10px;background:var(--si,rgba(122,168,162,.12));display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--sc,#7aa8a2);flex-shrink:0}
+    .stat-num{font-size:1.6rem;font-weight:700;color:#1a2e2c;line-height:1}
+    .stat-label{font-size:.75rem;color:#888;font-weight:500;margin-top:2px}
+    /* Filtros */
+    .filtros-bar{background:#fff;border-radius:14px;padding:16px 20px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .filtro-btn{padding:7px 18px;border-radius:20px;border:1.5px solid #dde8e6;background:#fff;color:#555;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .filtro-btn:hover{border-color:#7aa8a2;color:#7aa8a2}
+    .filtro-btn.active{background:#7aa8a2;border-color:#7aa8a2;color:#fff}
+    .filtros-sep{width:1px;height:24px;background:#e0e8e6;margin:0 4px}
+    .search-box{margin-left:auto;position:relative}
+    .search-box input{border:1.5px solid #dde8e6;border-radius:20px;padding:7px 16px 7px 36px;font-size:.82rem;outline:none;width:200px;transition:border-color .2s;font-family:'Montserrat',sans-serif}
+    .search-box input:focus{border-color:#7aa8a2}
+    .search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#aaa;font-size:.8rem}
+    /* Citas grid */
+    .citas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+    /* Cita card */
+    .cita-card{background:#fff;border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,.06);overflow:hidden;transition:transform .2s,box-shadow .2s;border-top:4px solid #7aa8a2}
+    .cita-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+    .cita-card.pendiente{border-top-color:#f39c12}
+    .cita-card.confirmada{border-top-color:#27ae60}
+    .cita-card.cancelada{border-top-color:#e74c3c;opacity:.75}
+    .cita-card.completada,.cita-card.atendida{border-top-color:#7aa8a2}
+    .card-head{padding:16px 18px 12px;display:flex;align-items:flex-start;justify-content:space-between}
+    .card-esp{display:flex;align-items:center;gap:10px}
+    .esp-icon-wrap{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:rgba(122,168,162,.1);display:flex;align-items:center;justify-content:center;font-size:1rem;color:#7aa8a2}
+    .cita-card.pendiente .esp-icon-wrap{background:rgba(243,156,18,.1);color:#f39c12}
+    .cita-card.confirmada .esp-icon-wrap{background:rgba(39,174,96,.1);color:#27ae60}
+    .cita-card.cancelada .esp-icon-wrap{background:rgba(231,76,60,.1);color:#e74c3c}
+    .esp-name{font-weight:700;font-size:.9rem;color:#1a2e2c}
+    .esp-sub{font-size:.75rem;color:#888;margin-top:2px}
+    .badge-estado{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.03em;white-space:nowrap}
+    .badge-pendiente{background:#fff3cd;color:#856404}
+    .badge-confirmada{background:#d1f5e0;color:#155724}
+    .badge-cancelada{background:#fde8e8;color:#842029}
+    .badge-completada,.badge-atendida{background:#d4edee;color:#1a6068}
+    .card-body{padding:0 18px 14px}
+    .info-row{display:flex;align-items:center;gap:8px;font-size:.82rem;color:#555;padding:5px 0;border-bottom:1px solid #f4f4f4}
+    .info-row:last-of-type{border-bottom:none}
+    .info-row i{width:16px;text-align:center;color:#7aa8a2;font-size:.8rem}
+    .cita-card.pendiente .info-row i{color:#f39c12}
+    .cita-card.confirmada .info-row i{color:#27ae60}
+    .cita-card.cancelada .info-row i{color:#e74c3c}
+    .motivo-box{margin:10px 18px 0;background:#f8fbfa;border-radius:8px;padding:10px 12px;font-size:.8rem;color:#666;line-height:1.5;border-left:3px solid #7aa8a2}
+    .motivo-box strong{color:#1a2e2c;display:block;margin-bottom:2px;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em}
+    .card-actions{padding:12px 18px 16px;display:flex;gap:8px;flex-wrap:wrap}
+    .btn-accion{flex:1;min-width:100px;padding:8px 14px;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+    .btn-mover{border-color:#7aa8a2;color:#7aa8a2;background:#fff}
+    .btn-mover:hover{background:#7aa8a2;color:#fff}
+    .btn-cancel{border-color:#e74c3c;color:#e74c3c;background:#fff}
+    .btn-cancel:hover{background:#e74c3c;color:#fff}
+    /* Skeleton */
+    .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skel-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+    .skel-h{height:16px;margin-bottom:10px}
+    .skel-w50{width:50%}.skel-w80{width:80%}.skel-w30{width:30%}
+    /* Empty */
+    .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:#aaa}
+    .empty-state i{font-size:3rem;margin-bottom:16px;display:block;color:#c8d8d6}
+    .empty-state h5{color:#666;font-weight:600;margin-bottom:8px}
+    .empty-state p{font-size:.88rem;margin-bottom:20px}
+    .empty-state a{background:#7aa8a2;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:.85rem;font-weight:600}
+    /* Toast */
+    .toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+    .mc-toast{background:#fff;border-radius:10px;padding:14px 18px;box-shadow:0 6px 28px rgba(0,0,0,.15);display:flex;align-items:center;gap:12px;min-width:280px;max-width:380px;animation:slideIn .3s ease;font-size:.85rem;border-left:4px solid #7aa8a2}
+    .mc-toast.error{border-left-color:#e74c3c}
+    .mc-toast.warning{border-left-color:#f39c12}
+    .mc-toast i{font-size:1.1rem;color:#7aa8a2}
+    .mc-toast.error i{color:#e74c3c}
+    .mc-toast.warning i{color:#f39c12}
+    .mc-toast span{flex:1;color:#333}
+    .toast-close{background:none;border:none;color:#aaa;cursor:pointer;font-size:.9rem;padding:0}
+    @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+    /* Modales */
+    .modal-content{border:none;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+    .modal-header{background:linear-gradient(135deg,#1a2e2c,#2a4a47);color:#fff;border-radius:16px 16px 0 0;border:none;padding:20px 24px}
+    .modal-header .modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700}
+    .modal-header .btn-close{filter:invert(1);opacity:.7}
+    .modal-body{padding:24px}
+    .modal-footer{border:none;padding:0 24px 24px;gap:10px}
+    .form-label-mc{font-size:.8rem;font-weight:700;color:#444;margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em}
+    .form-ctrl-mc{width:100%;border:1.5px solid #dde8e6;border-radius:8px;padding:10px 14px;font-size:.88rem;outline:none;transition:border-color .2s;font-family:'Montserrat',sans-serif}
+    .form-ctrl-mc:focus{border-color:#7aa8a2}
+    .modal-detail-box{background:#f4f7f6;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .modal-detail-box i{color:#7aa8a2}
+    .modal-detail-box span{font-size:.85rem;font-weight:600;color:#1a2e2c}
+    .btn-modal-confirm{background:linear-gradient(135deg,#7aa8a2,#5b8a84);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;gap:7px}
+    .btn-modal-confirm:hover{opacity:.88}
+    .btn-modal-confirm:disabled{opacity:.5;cursor:not-allowed}
+    .btn-modal-danger{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;gap:7px}
+    .btn-modal-danger:hover{opacity:.88}
+    .btn-modal-danger:disabled{opacity:.5;cursor:not-allowed}
+    .btn-modal-cancel{background:#fff;color:#666;border:1.5px solid #dde8e6;padding:11px 20px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .btn-modal-cancel:hover{border-color:#aaa;color:#333}
+    .warn-box{background:#fff8e1;border-radius:10px;padding:14px 16px;display:flex;gap:10px;align-items:flex-start;margin-top:16px;border-left:3px solid #f39c12}
+    .warn-box i{color:#f39c12;margin-top:2px;flex-shrink:0}
+    .warn-box p{font-size:.8rem;color:#7a5c00;margin:0;line-height:1.5}
+    .slots-grid-modal{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px}
+    .slot-btn{padding:8px 4px;border:1.5px solid #dde8e6;border-radius:8px;text-align:center;font-size:.8rem;font-weight:600;color:#555;cursor:pointer;transition:all .2s;background:#fff}
+    .slot-btn:hover{border-color:#7aa8a2;color:#7aa8a2}
+    .slot-btn.selected{background:#7aa8a2;border-color:#7aa8a2;color:#fff}
+    /* Responsive */
+    @media(max-width:768px){
+      .mc-sidebar{transform:translateX(-260px)}
+      .mc-sidebar.open{transform:translateX(0)}
+      .mc-main{margin-left:0}
+      .btn-sidebar-toggle{display:block}
+      .mc-content{padding:20px 16px}
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .mc-topbar{padding:0 16px}
+      .search-box{display:none}
+    }
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .citas-grid{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-<div class="dashboard-wrapper">
 
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-text">Eje<span>Salud</span></div>
-      <div class="sidebar-role-badge"><i class="fas fa-user me-1"></i>Paciente</div>
+<div class="toast-container" id="toastContainer"></div>
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="toggleSidebar()"></div>
+
+<div class="mc-wrapper">
+  <!-- SIDEBAR -->
+  <aside class="mc-sidebar" id="mcSidebar">
+    <div class="sidebar-brand">
+      Eje<span>Salud</span>
+      <div><span class="sidebar-badge" id="sb-role-badge"><i class="fas fa-user me-1"></i>Paciente</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="sidebar-section-title">Principal</div>
-      <a href="dashboard-paciente.html" class="sidebar-link"><i class="fas fa-th-large"></i>Dashboard</a>
-      <a href="agendar-cita.html" class="sidebar-link"><i class="fas fa-calendar-plus"></i>Agendar cita</a>
-      <a href="mis-citas.html" class="sidebar-link active"><i class="fas fa-calendar-alt"></i>Mis citas</a>
-      <div class="sidebar-section-title">Cuenta</div>
-      <a href="#" class="sidebar-link"><i class="fas fa-user-circle"></i>Mi perfil</a>
-      <a href="#" class="sidebar-link" data-action="logout"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
+      <div class="nav-section">Principal</div>
+      <a href="index.html"        class="nav-link-item"><i class="fas fa-home"></i>Inicio</a>
+      <a href="consultation.html" class="nav-link-item"><i class="fas fa-calendar-plus"></i>Agendar cita</a>
+      <a href="mis-citas.html"    class="nav-link-item active"><i class="fas fa-calendar-alt"></i>Mis citas</a>
+      <div class="nav-section">Cuenta</div>
+      <a href="#" class="nav-link-item"><i class="fas fa-user-circle"></i>Mi perfil</a>
+      <a href="#" class="nav-link-item" id="btn-logout"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
     </nav>
-    <div class="sidebar-user">
-      <div class="sidebar-avatar">JP</div>
+    <div class="sidebar-footer">
+      <div class="sf-avatar" id="sb-initials">?</div>
       <div>
-        <div class="sidebar-user-name">Juan Pérez</div>
-        <div class="sidebar-user-email">juan@email.com</div>
+        <div class="sf-name" id="sb-nombre">—</div>
+        <div class="sf-role" id="sb-rol">—</div>
       </div>
     </div>
   </aside>
 
-  <div class="main-content">
-    <div class="topbar">
+  <!-- MAIN -->
+  <div class="mc-main">
+    <div class="mc-topbar">
       <div class="d-flex align-items-center gap-3">
-        <button id="sidebarToggle" class="d-md-none btn border-0 p-1">
-          <i class="fas fa-bars text-primary"></i>
-        </button>
-        <span class="topbar-title">Mis citas</span>
+        <button class="btn-sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <h1>Mis Citas <small id="subtitulo-pagina"></small></h1>
       </div>
-      <a href="agendar-cita.html" class="btn-primary-custom" style="font-size:.85rem">
-        <i class="fas fa-plus me-1"></i>Nueva cita
-      </a>
+      <a href="consultation.html" class="btn-nueva-cita"><i class="fas fa-plus"></i>Nueva cita</a>
     </div>
 
-    <div class="content-area">
-      <!-- Filtros -->
-      <div class="dash-card mb-4">
-        <div class="d-flex flex-wrap align-items-center gap-3 justify-content-between">
-          <div class="d-flex gap-2 flex-wrap">
-            <button class="filter-tab btn-primary-custom active" style="font-size:.82rem;padding:7px 18px" onclick="filtrarCitas('todas')">
-              Todas
-            </button>
-            <button class="filter-tab btn-outline-primary-custom" style="font-size:.82rem;padding:6px 18px" onclick="filtrarCitas('confirmada')">
-              Confirmadas
-            </button>
-            <button class="filter-tab btn-outline-primary-custom" style="font-size:.82rem;padding:6px 18px" onclick="filtrarCitas('pendiente')">
-              Pendientes
-            </button>
-            <button class="filter-tab btn-outline-primary-custom" style="font-size:.82rem;padding:6px 18px" onclick="filtrarCitas('atendida')">
-              Atendidas
-            </button>
-            <button class="filter-tab btn-outline-primary-custom" style="font-size:.82rem;padding:6px 18px" onclick="filtrarCitas('cancelada')">
-              Canceladas
-            </button>
-          </div>
-          <select id="filterEstado" style="display:none"></select>
-          <select class="form-control-custom" style="width:auto;font-size:.85rem" onchange="filtrarPorArea(this.value)">
-            <option value="">Todas las áreas</option>
-            <option>Medicina General</option>
-            <option>Odontología</option>
-            <option>Medicina Interna</option>
-            <option>Radiografías</option>
-            <option>Psicología</option>
-          </select>
+    <div class="mc-content">
+      <!-- Stats -->
+      <div class="stats-grid" id="stats-bar" style="display:none">
+        <div class="stat-card" style="--sc:#7aa8a2;--si:rgba(122,168,162,.12)">
+          <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+          <div><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total citas</div></div>
+        </div>
+        <div class="stat-card" style="--sc:#f39c12;--si:rgba(243,156,18,.1)">
+          <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          <div><div class="stat-num" id="stat-pendientes">0</div><div class="stat-label">Pendientes</div></div>
+        </div>
+        <div class="stat-card" style="--sc:#27ae60;--si:rgba(39,174,96,.1)">
+          <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+          <div><div class="stat-num" id="stat-confirmadas">0</div><div class="stat-label">Confirmadas</div></div>
+        </div>
+        <div class="stat-card" style="--sc:#5b8a84;--si:rgba(91,138,132,.1)">
+          <div class="stat-icon"><i class="fas fa-star"></i></div>
+          <div><div class="stat-num" id="stat-completadas">0</div><div class="stat-label">Completadas</div></div>
         </div>
       </div>
 
-      <!-- Lista de citas -->
-      <div id="citasPacienteList"></div>
+      <!-- Filtros -->
+      <div class="filtros-bar" id="filtros" style="display:none">
+        <button class="filtro-btn active" data-filtro="todas">Todas</button>
+        <button class="filtro-btn" data-filtro="pendiente"><i class="fas fa-clock me-1"></i>Pendientes</button>
+        <button class="filtro-btn" data-filtro="confirmada"><i class="fas fa-check me-1"></i>Confirmadas</button>
+        <button class="filtro-btn" data-filtro="completada"><i class="fas fa-star me-1"></i>Completadas</button>
+        <button class="filtro-btn" data-filtro="cancelada"><i class="fas fa-times me-1"></i>Canceladas</button>
+        <div class="filtros-sep"></div>
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-citas" placeholder="Buscar especialidad…"/>
+        </div>
+      </div>
+
+      <!-- Skeletons -->
+      <div class="citas-grid" id="skeletons">
+        <div class="skel-card"><div class="skeleton skel-h skel-w50 mb-3"></div><div class="skeleton skel-h skel-w80 mb-2"></div><div class="skeleton skel-h skel-w30"></div></div>
+        <div class="skel-card"><div class="skeleton skel-h skel-w50 mb-3"></div><div class="skeleton skel-h skel-w80 mb-2"></div><div class="skeleton skel-h skel-w30"></div></div>
+        <div class="skel-card"><div class="skeleton skel-h skel-w50 mb-3"></div><div class="skeleton skel-h skel-w80 mb-2"></div><div class="skeleton skel-h skel-w30"></div></div>
+      </div>
+
+      <!-- Lista -->
+      <div class="citas-grid" id="citas-container"></div>
     </div>
   </div>
 </div>
 
-<!-- Modal Mover Cita -->
-<div class="modal fade modal-custom" id="moverCitaModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
+<!-- MODAL CANCELAR -->
+<div class="modal fade" id="modalCancelar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Reprogramar cita</h5>
+        <h5 class="modal-title"><i class="fas fa-times-circle me-2"></i>Cancelar cita</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label-custom">Nueva fecha</label>
-          <input type="date" id="nuevaFecha" class="form-control-custom future-only"/>
-        </div>
-        <div class="mb-3">
-          <label class="form-label-custom">Nueva hora</label>
-          <select id="nuevaHora" class="form-control-custom">
-            <option value="">Selecciona hora…</option>
-            <option>09:00</option><option>09:30</option><option>10:00</option>
-            <option>10:30</option><option>11:00</option><option>11:30</option>
-            <option>12:00</option><option>14:00</option><option>14:30</option>
-            <option>15:00</option><option>15:30</option><option>16:00</option>
-            <option>16:30</option><option>17:00</option>
-          </select>
-        </div>
-        <div class="alert-info-custom">
-          <i class="fas fa-info-circle me-2"></i>Recibirás confirmación por correo electrónico.
-        </div>
+      <div class="modal-body">
+        <div class="modal-detail-box"><i class="fas fa-calendar-alt"></i><span id="modal-detalle-cita">—</span></div>
+        <p style="font-size:.88rem;color:#555;margin:0">¿Estás seguro de que deseas cancelar esta cita? Esta acción no se puede deshacer.</p>
+        <div class="warn-box"><i class="fas fa-exclamation-triangle"></i><p>Si necesitas reagendar, usa el botón <strong>Mover</strong> en lugar de cancelar.</p></div>
       </div>
-      <div class="modal-footer border-0 px-4 pb-4">
-        <button class="btn-outline-primary-custom" data-bs-dismiss="modal">Cancelar</button>
-        <button class="btn-primary-custom" onclick="confirmarMoverCita()">
-          <i class="fas fa-check me-1"></i>Confirmar cambio
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-bs-dismiss="modal">No, conservar</button>
+        <button class="btn-modal-danger" id="btn-confirmar-cancelar">
+          <span id="cancelar-btn-text"><i class="fas fa-times me-1"></i>Sí, cancelar</span>
+          <span id="cancelar-spinner" style="display:none"><i class="fas fa-circle-notch fa-spin me-1"></i>Cancelando…</span>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- MODAL MOVER -->
+<div class="modal fade" id="modalMover" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:460px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Reagendar cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-detail-box"><i class="fas fa-stethoscope"></i><span id="modal-mover-detalle">—</span></div>
+        <div class="mb-3">
+          <label class="form-label-mc">Nueva fecha</label>
+          <input type="date" id="mover-fecha" class="form-ctrl-mc"/>
+        </div>
+        <div class="mb-2">
+          <label class="form-label-mc">Horario disponible</label>
+          <div class="slots-grid-modal" id="mover-slots-grid"></div>
+          <input type="hidden" id="mover-hora"/>
+        </div>
+        <div id="mover-slots-loading" style="display:none;font-size:.82rem;color:#888;padding:10px 0"><i class="fas fa-circle-notch fa-spin me-1"></i>Cargando horarios…</div>
+        <div id="mover-slots-empty"   style="display:none;font-size:.82rem;color:#e74c3c;padding:10px 0"><i class="fas fa-calendar-times me-1"></i>No hay horarios para esta fecha.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-modal-confirm" id="btn-confirmar-mover">
+          <span id="mover-btn-text"><i class="fas fa-check me-1"></i>Confirmar cambio</span>
+          <span id="mover-spinner" style="display:none"><i class="fas fa-circle-notch fa-spin me-1"></i>Reagendando…</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/aos.js"></script>
 <script src="assets/js/api.js"></script>
-<script src="assets/js/main.js"></script>
 <script>
-// Activar el filtro visual
-document.querySelectorAll('.filter-tab').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.filter-tab').forEach(b => {
-      b.className = 'filter-tab btn-outline-primary-custom';
-      b.style.fontSize = '.82rem';
-      b.style.padding = '6px 18px';
-    });
-    this.className = 'filter-tab btn-primary-custom active';
-    this.style.fontSize = '.82rem';
-    this.style.padding = '7px 18px';
+if (!Auth.isLogged()) { window.location.href = 'login.html'; }
+
+// Sidebar usuario
+(function(){
+  const u = Auth.getUser();
+  if(!u) return;
+  const ini = ((u.nombre||'')[0]||'').toUpperCase() + ((u.apellido||u.nombre||'')[1]||'').toUpperCase();
+  document.getElementById('sb-initials').textContent = ini || '?';
+  document.getElementById('sb-nombre').textContent   = (u.nombre+' '+(u.apellido||'')).trim();
+  document.getElementById('sb-rol').textContent      = u.rol === 'medico' ? 'Médico' : 'Paciente';
+  document.getElementById('sb-role-badge').innerHTML = u.rol === 'medico'
+    ? '<i class="fas fa-stethoscope me-1"></i>Médico'
+    : '<i class="fas fa-user me-1"></i>Paciente';
+})();
+document.getElementById('btn-logout').addEventListener('click',()=>{ Auth.clear(); window.location.href='login.html'; });
+
+function toggleSidebar(){
+  const sb=document.getElementById('mcSidebar');
+  const ov=document.getElementById('sidebarOverlay');
+  sb.classList.toggle('open');
+  ov.style.display=sb.classList.contains('open')?'block':'none';
+}
+
+// Toast
+function toast(msg,type='success'){
+  const icons={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle'};
+  const t=document.createElement('div');
+  t.className=`mc-toast${type!=='success'?' '+type:''}`;
+  t.innerHTML=`<i class="fas ${icons[type]}"></i><span>${msg}</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(()=>t.remove(),4000);
+}
+
+const ICONOS={'Médico General':'fa-stethoscope','Medicina Interna':'fa-heartbeat','Psicología':'fa-brain','Podología':'fa-shoe-prints','Radiología':'fa-x-ray'};
+function iconoEsp(e){return ICONOS[e]||'fa-user-md';}
+function badge(e){const cap=e.charAt(0).toUpperCase()+e.slice(1);return `<span class="badge-estado badge-${e}">${cap}</span>`;}
+function fechaLarga(iso){return new Date(iso).toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+
+let _todas=[], _cancelId=null, _moverId=null, _medicoMoverId=null;
+const mCancelar=new bootstrap.Modal(document.getElementById('modalCancelar'));
+const mMover   =new bootstrap.Modal(document.getElementById('modalMover'));
+
+async function cargarCitas(){
+  document.getElementById('skeletons').style.display='grid';
+  document.getElementById('citas-container').innerHTML='';
+  try{
+    const data=await CitasAPI.listar();
+    _todas=data.citas||[];
+    document.getElementById('skeletons').style.display='none';
+    document.getElementById('filtros').style.display='flex';
+    document.getElementById('stats-bar').style.display='grid';
+    if(Auth.isAdmin&&Auth.isAdmin()) document.getElementById('subtitulo-pagina').textContent=`(${data.total||_todas.length} en total)`;
+    stats(_todas); render(_todas);
+  }catch(err){
+    document.getElementById('skeletons').style.display='none';
+    document.getElementById('citas-container').innerHTML=`<div class="empty-state"><i class="fas fa-exclamation-circle" style="color:#e74c3c"></i><h5>Error al cargar</h5><p>${err.message}</p></div>`;
+  }
+}
+
+function stats(c){
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('stat-total',c.length);
+  s('stat-pendientes',c.filter(x=>x.estado==='pendiente').length);
+  s('stat-confirmadas',c.filter(x=>x.estado==='confirmada').length);
+  s('stat-completadas',c.filter(x=>['completada','atendida'].includes(x.estado)).length);
+}
+
+function render(citas){
+  const c=document.getElementById('citas-container');
+  if(!citas.length){
+    c.innerHTML=`<div class="empty-state"><i class="fas fa-calendar-times"></i><h5>No hay citas para mostrar</h5><p>No tienes citas en esta categoría.</p><a href="consultation.html"><i class="fas fa-plus me-1"></i>Agendar nueva cita</a></div>`;
+    return;
+  }
+  c.innerHTML=citas.map(cita=>{
+    const puedeMover=['pendiente','confirmada'].includes(cita.estado);
+    const medico=cita.medico?`Dr. ${cita.medico.nombre} ${cita.medico.apellido||''}`.trim():'Médico asignado';
+    const mId=cita.medico?._id||cita.medico||'';
+    return `<div class="cita-card ${cita.estado}" data-aos="fade-up">
+      <div class="card-head">
+        <div class="card-esp">
+          <div class="esp-icon-wrap"><i class="fas ${iconoEsp(cita.especialidad)}"></i></div>
+          <div><div class="esp-name">${cita.especialidad||'—'}</div><div class="esp-sub">${medico}</div></div>
+        </div>
+        ${badge(cita.estado)}
+      </div>
+      <div class="card-body">
+        <div class="info-row"><i class="fas fa-calendar-alt"></i>${fechaLarga(cita.fecha)}</div>
+        <div class="info-row"><i class="fas fa-clock"></i>${cita.hora} hrs</div>
+        <div class="info-row"><i class="fas fa-user-md"></i>${medico}</div>
+      </div>
+      ${cita.motivo?`<div class="motivo-box"><strong>Motivo</strong>${cita.motivo}</div>`:''}
+      ${puedeMover?`<div class="card-actions">
+        <button class="btn-accion btn-mover" onclick="abrirMover('${cita._id}','${cita.especialidad}','${cita.hora}','${mId}')"><i class="fas fa-calendar-alt"></i>Mover</button>
+        <button class="btn-accion btn-cancel" onclick="abrirCancelar('${cita._id}','${cita.especialidad}','${cita.hora}')"><i class="fas fa-times"></i>Cancelar</button>
+      </div>`:''}
+    </div>`;
+  }).join('');
+  if(typeof AOS!=='undefined') AOS.refresh();
+}
+
+// Filtros
+document.querySelectorAll('.filtro-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active'); filtrar();
   });
 });
+document.getElementById('search-citas').addEventListener('input',filtrar);
+function filtrar(){
+  const f=document.querySelector('.filtro-btn.active')?.dataset.filtro||'todas';
+  const q=document.getElementById('search-citas').value.toLowerCase();
+  let r=f==='todas'?_todas:_todas.filter(c=>c.estado===f);
+  if(q) r=r.filter(c=>(c.especialidad||'').toLowerCase().includes(q)||(c.motivo||'').toLowerCase().includes(q)||(c.medico?.nombre||'').toLowerCase().includes(q));
+  render(r);
+}
+
+// Modal cancelar
+window.abrirCancelar=(id,esp,hora)=>{
+  _cancelId=id;
+  document.getElementById('modal-detalle-cita').textContent=`${esp} — ${hora} hrs`;
+  mCancelar.show();
+};
+document.getElementById('btn-confirmar-cancelar').addEventListener('click',async()=>{
+  if(!_cancelId) return;
+  const bt=document.getElementById('cancelar-btn-text'),sp=document.getElementById('cancelar-spinner'),btn=document.getElementById('btn-confirmar-cancelar');
+  bt.style.display='none';sp.style.display='inline';btn.disabled=true;
+  try{await CitasAPI.cancelar(_cancelId);mCancelar.hide();toast('Cita cancelada correctamente.');await cargarCitas();}
+  catch(e){toast('Error al cancelar: '+e.message,'error');}
+  finally{bt.style.display='inline';sp.style.display='none';btn.disabled=false;_cancelId=null;}
+});
+
+// Modal mover
+window.abrirMover=(id,esp,hora,mId)=>{
+  _moverId=id;_medicoMoverId=mId;
+  document.getElementById('modal-mover-detalle').textContent=`${esp} — ${hora} hrs`;
+  const fi=document.getElementById('mover-fecha');
+  fi.min=new Date().toISOString().split('T')[0];fi.value='';
+  document.getElementById('mover-hora').value='';
+  document.getElementById('mover-slots-grid').innerHTML='';
+  document.getElementById('mover-slots-loading').style.display='none';
+  document.getElementById('mover-slots-empty').style.display='none';
+  mMover.show();
+};
+document.getElementById('mover-fecha').addEventListener('change',async function(){
+  const fecha=this.value;
+  document.getElementById('mover-hora').value='';
+  document.getElementById('mover-slots-grid').innerHTML='';
+  if(!fecha||!_medicoMoverId) return;
+  document.getElementById('mover-slots-loading').style.display='block';
+  document.getElementById('mover-slots-empty').style.display='none';
+  try{
+    const data=await CitasAPI.disponibilidad(_medicoMoverId,fecha);
+    const slots=data.horasDisponibles||data.disponibles||[];
+    document.getElementById('mover-slots-loading').style.display='none';
+    if(!slots.length){document.getElementById('mover-slots-empty').style.display='block';return;}
+    document.getElementById('mover-slots-grid').innerHTML=slots.map(s=>{
+      const h=s.hora||s,ok=s.disponible!==false;
+      return `<div class="slot-btn${ok?'':''}" style="${ok?'':'opacity:.4;pointer-events:none'}" data-hora="${h}" onclick="selectSlot(this,'${h}')">${h}</div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('mover-slots-loading').style.display='none';
+    document.getElementById('mover-slots-empty').style.display='block';
+    document.getElementById('mover-slots-empty').textContent=e.message;
+  }
+});
+function selectSlot(el,hora){
+  document.querySelectorAll('.slot-btn').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('mover-hora').value=hora;
+}
+document.getElementById('btn-confirmar-mover').addEventListener('click',async()=>{
+  const f=document.getElementById('mover-fecha').value;
+  const h=document.getElementById('mover-hora').value;
+  if(!f){toast('Selecciona una fecha.','warning');return;}
+  if(!h){toast('Selecciona un horario.','warning');return;}
+  const bt=document.getElementById('mover-btn-text'),sp=document.getElementById('mover-spinner'),btn=document.getElementById('btn-confirmar-mover');
+  bt.style.display='none';sp.style.display='inline';btn.disabled=true;
+  try{await CitasAPI.mover(_moverId,f,h);mMover.hide();toast('¡Cita reagendada exitosamente!');await cargarCitas();}
+  catch(e){toast('Error al reagendar: '+e.message,'error');}
+  finally{bt.style.display='inline';sp.style.display='none';btn.disabled=false;_moverId=null;}
+});
+
+if(typeof AOS!=='undefined') AOS.init({duration:400,once:true});
+cargarCitas();
 </script>
 </body>
 </html>
