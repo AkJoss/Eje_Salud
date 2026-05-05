@@ -1,110 +1,28 @@
-# 🏥 Eje Salud — Sistema de Citas Médicas
+# 🏥 Eje Salud — Backend API
 
-Sistema completo de gestión de citas para el **Hospital Eje Central**.  
-**Backend:** Node.js + Express + MongoDB + JWT  
-**Frontend:** HTML/CSS/JS puro + Bootstrap 5 (rama `frontend-ejsalud`)
+Backend REST con Node.js + Express + MongoDB para la clínica Eje Salud.
 
 ---
 
-## 🗂 Ramas del repositorio
-
-| Rama | Contenido |
-|------|-----------|
-| `main` | Backend (Node.js + Express + MongoDB) |
-| `frontend-ejsalud` | Frontend (HTML/CSS/JS) |
+## Requisitos
+- Node.js 18+
+- MongoDB local o Atlas
 
 ---
 
-## ⚙️ Requisitos previos
-
-- [Node.js](https://nodejs.org/) v18 o superior
-- [MongoDB Community](https://www.mongodb.com/try/download/community) corriendo en `localhost:27017`
-- npm v9 o superior
-
----
-
-## 🚀 Instalación completa (Backend + Frontend)
-
-### Paso 1 — Clonar el repositorio
+## Instalación
 
 ```bash
-git clone https://github.com/AkJoss/Eje_Salud.git
-cd Eje_Salud
-```
-
-### Paso 2 — Configurar el backend
-
-```bash
-# Instalar dependencias
+# 1. Instalar dependencias
 npm install
 
-# Copiar variables de entorno
+# 2. Crear archivo de variables de entorno
 cp .env.example .env
-```
+# Edita .env con tu URI de MongoDB y un JWT_SECRET seguro
 
-Editar el `.env`:
-
-```env
-PORT=3001
-MONGODB_URI=mongodb://localhost:27017/eje-salud
-JWT_SECRET=pon_aqui_una_clave_secreta_larga
-JWT_EXPIRES_IN=7d
-NODE_ENV=development
-```
-
-### Paso 3 — Poblar médicos de prueba (solo la primera vez)
-
-```bash
-node src/seedMedicos.js
-```
-
-Inserta 5 médicos con distintas especialidades en la base de datos.
-
-### Paso 4 — Iniciar el servidor backend
-
-```bash
-# Modo desarrollo (con nodemon)
+# 3. Iniciar en desarrollo
 npm run dev
 ```
-
-El backend queda en: `http://localhost:3001`
-
-### Paso 5 — Levantar el frontend
-
-```bash
-# Cambiar a la rama del frontend
-git checkout frontend-ejsalud
-
-# Levantar servidor estático en la carpeta del proyecto
-python3 -m http.server 5500
-# o con Node.js:
-npx serve . -p 5500
-```
-
-Abrir en el navegador: `http://localhost:5500`
-
-> ⚠️ **Importante:** El backend debe estar corriendo **antes** de usar el frontend.
-
----
-
-## 🧪 Flujo de prueba
-
-1. Abre `http://localhost:5500/registro.html` → Crea una cuenta de paciente
-2. Ve a `http://localhost:5500/login.html` → Inicia sesión
-3. En el dashboard → Haz clic en **Agendar Cita**
-4. Selecciona especialidad → médico → fecha → hora → Confirmar
-5. En **Mis Citas** puedes mover o cancelar la cita
-
----
-
-## 📝 Notas para el equipo
-
-- **No subas tu `.env`** al repositorio (ya está en `.gitignore`)
-- El frontend está en la rama **`frontend-ejsalud`**
-- El backend está en la rama **`main`**
-- Para contribuir, crea una rama propia: `git checkout -b feature/tu-nombre`
-
----
 
 ---
 
@@ -150,29 +68,61 @@ Abrir en el navegador: `http://localhost:5500`
 
 ## Estructura del proyecto
 ```
-eje-salud-backend/
-├── src/
-│   ├── config/
-│   │   └── database.js       # Conexión MongoDB
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── medicoController.js
-│   │   └── citaController.js
-│   ├── middlewares/
-│   │   └── auth.js           # JWT + roles
-│   ├── models/
-│   │   ├── User.js           # Pacientes y admins
-│   │   ├── Medico.js         # Médicos + horarios
-│   │   └── Cita.js           # Citas médicas
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── medicos.js
-│   │   └── citas.js
-│   └── index.js              # Servidor principal
-├── .env.example
-├── package.json
-└── README.md
+eje-salud/
+│
+├── backend/                        # Servidor Node.js + Express
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── database.js         # Conexión MongoDB
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── medicoController.js
+│   │   │   └── citaController.js
+│   │   ├── middlewares/
+│   │   │   └── auth.js             # JWT + roles
+│   │   ├── models/
+│   │   │   ├── User.js             # Pacientes y admins
+│   │   │   ├── Medico.js           # Médicos + horarios
+│   │   │   └── Cita.js             # Citas médicas
+│   │   ├── routes/
+│   │   │   ├── auth.js
+│   │   │   ├── medicos.js
+│   │   │   └── citas.js
+│   │   └── index.js                # Servidor principal
+│   ├── .env.example
+│   ├── package.json
+│   └── README.md
+│
+└── frontend/                       # Sitio web estático
+    ├── index.html                  # Página principal
+    ├── login.html                  # Iniciar sesión
+    ├── registro.html               # Registro de paciente
+    ├── consultation.html           # Agendar cita
+    ├── mis-citas.html              # Panel del paciente
+    └── assets/
+        ├── css/
+        │   ├── bootstrap.min.css
+        │   ├── aos.css
+        │   └── style.css           # Estilos personalizados
+        ├── js/
+        │   ├── bootstrap.bundle.min.js
+        │   ├── aos.js
+        │   ├── script.js           # Lógica general del sitio
+        │   └── api.js              # Cliente HTTP + Auth helpers
+        └── images/
 ```
+
+---
+
+## Variables de entorno — `.env`
+```
+MONGODB_URI=mongodb://localhost:27017/eje-salud
+JWT_SECRET=clave_super_secreta
+JWT_EXPIRES_IN=7d
+PORT=5000
+```
+
+> El servidor corre en **http://localhost:5000**
 
 ---
 
@@ -199,8 +149,7 @@ Respuesta:
     "especialidad": "Psicología",
     "fecha": "2026-05-20T00:00:00.000Z",
     "hora": "10:00",
-    "estado": "pendiente",
-    ...
+    "estado": "pendiente"
   }
 }
 ```
