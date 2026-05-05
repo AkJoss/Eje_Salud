@@ -1,155 +1,86 @@
-# 🏥 Eje Salud — Backend API
+# Eje Salud — Backend (FastAPI)
 
-Backend REST con Node.js + Express + MongoDB para la clínica Eje Salud.
-
----
+API REST para la clínica **Eje Salud**: especialidades (Médico general, Radiología, Psicología, Podología, Medicina integral), solicitudes de cita, mensajes de contacto, disponibilidad por franjas y panel administrativo con JWT.
 
 ## Requisitos
-- Node.js 18+
-- MongoDB local o Atlas
 
----
+- Python 3.11+
+- MySQL 8 (o compatible, ej. MariaDB 10.6+) con base de datos creada
 
-## Instalación
+## Configuración
+
+Copie `.env.example` a `.env` y ajuste valores. Variables importantes:
+
+- `DATABASE_URL`: cadena SQLAlchemy para **MySQL** con PyMySQL, por ejemplo  
+  `mysql+pymysql://USUARIO:CONTRASENA@127.0.0.1:3306/eje_salud?charset=utf8mb4`  
+  Si la contraseña tiene caracteres reservados (`@`, `:`, etc.), codifícala con `urllib.parse.quote_plus` antes de armar la URL.
+- `JWT_SECRET_KEY`: secreto largo y aleatorio en producción.
+- `FRONTEND_ORIGINS`: orígenes CORS separados por coma (ej. `http://localhost:5173`).
+- `ADMIN_BOOTSTRAP_EMAIL` / `ADMIN_BOOTSTRAP_PASSWORD`: si están definidos y no existe ningún administrador, se crea el primer usuario al arrancar (solo bootstrap controlado).
+
+## Base de datos
+
+En MySQL, cree la base (UTF-8):
+
+```sql
+CREATE DATABASE eje_salud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+Otorgue permisos al usuario que usará en `DATABASE_URL`.
 
 ```bash
-# 1. Instalar dependencias
-npm install
-
-# 2. Crear archivo de variables de entorno
-cp .env.example .env
-# Edita .env con tu URI de MongoDB y un JWT_SECRET seguro
-
-# 3. Iniciar en desarrollo
-npm run dev
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+alembic upgrade head
 ```
 
----
+Las especialidades por defecto se insertan automáticamente al **primer arranque** de la aplicación si la tabla está vacía.
 
-## Endpoints
+Las pruebas (`pytest`) fuerzan **SQLite en archivo temporal** para no depender de un servidor MySQL en CI.
 
-### Auth — `/api/auth`
-| Método | Ruta | Acceso | Descripción |
-|--------|------|--------|-------------|
-| POST | `/registro` | Público | Registrar paciente |
-| POST | `/login` | Público | Iniciar sesión |
-| GET | `/perfil` | Autenticado | Ver mi perfil |
+## Ejecutar
 
-### Médicos — `/api/medicos`
-| Método | Ruta | Acceso | Descripción |
-|--------|------|--------|-------------|
-| GET | `/` | Público | Listar médicos (filtro: `?especialidad=Psicología`) |
-| GET | `/:id` | Público | Ver un médico |
-| GET | `/especialidades` | Público | Ver especialidades disponibles |
-| POST | `/` | Admin | Crear médico |
-| PUT | `/:id` | Admin | Actualizar médico |
-| DELETE | `/:id` | Admin | Desactivar médico |
-
-### Citas — `/api/citas`
-| Método | Ruta | Acceso | Descripción |
-|--------|------|--------|-------------|
-| GET | `/` | Autenticado | Mis citas (admin ve todas) |
-| GET | `/:id` | Autenticado | Ver una cita |
-| GET | `/disponibilidad?medicoId=&fecha=` | Autenticado | Horas disponibles |
-| POST | `/` | Paciente | Agendar cita |
-| PUT | `/:id/estado` | Admin | Cambiar estado |
-| DELETE | `/:id` | Autenticado | Cancelar cita |
-
----
-
-## Especialidades registradas
-- Médico General
-- Medicina Interna
-- Psicología
-- Podología
-- Radiología
-
----
-
-## Estructura del proyecto
-```
-eje-salud/
-│
-├── backend/                        # Servidor Node.js + Express
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── database.js         # Conexión MongoDB
-│   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   ├── medicoController.js
-│   │   │   └── citaController.js
-│   │   ├── middlewares/
-│   │   │   └── auth.js             # JWT + roles
-│   │   ├── models/
-│   │   │   ├── User.js             # Pacientes y admins
-│   │   │   ├── Medico.js           # Médicos + horarios
-│   │   │   └── Cita.js             # Citas médicas
-│   │   ├── routes/
-│   │   │   ├── auth.js
-│   │   │   ├── medicos.js
-│   │   │   └── citas.js
-│   │   └── index.js                # Servidor principal
-│   ├── .env.example
-│   ├── package.json
-│   └── README.md
-│
-└── frontend/                       # Sitio web estático
-    ├── index.html                  # Página principal
-    ├── login.html                  # Iniciar sesión
-    ├── registro.html               # Registro de paciente
-    ├── consultation.html           # Agendar cita
-    ├── mis-citas.html              # Panel del paciente
-    └── assets/
-        ├── css/
-        │   ├── bootstrap.min.css
-        │   ├── aos.css
-        │   └── style.css           # Estilos personalizados
-        ├── js/
-        │   ├── bootstrap.bundle.min.js
-        │   ├── aos.js
-        │   ├── script.js           # Lógica general del sitio
-        │   └── api.js              # Cliente HTTP + Auth helpers
-        └── images/
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
----
+Documentación interactiva: `http://localhost:8000/docs`
 
-## Variables de entorno — `.env`
+## Contrato API (resumen)
+
+Prefijo: `/api/v1`
+
+**Público**
+
+- `GET /specialties`, `GET /specialties/{slug}`
+- `GET /availability?slot_date=YYYY-MM-DD&specialty_slug=...`
+- `POST /appointment-requests` — cuerpo incluye `specialty_slug`, datos del paciente y opcionalmente `availability_slot_id`
+- `POST /contact-messages`
+
+**Admin (cabecera `Authorization: Bearer <token>`)**
+
+- `POST /auth/login` — JSON `{ "email", "password" }`
+- `GET|PATCH /admin/appointment-requests`, `PATCH /admin/appointment-requests/{id}`
+- `GET|POST|PATCH|DELETE /admin/specialties`
+- `GET|POST|PATCH|DELETE /admin/availability-slots`
+- `GET|PATCH /admin/contact-messages`
+
+**Salud**
+
+- `GET /health`
+
+### Integración con el frontend
+
+Si el proyecto ZIP del frontend no está en este workspace, apunte el cliente HTTP a `API_URL` (por ejemplo `http://localhost:8000/api/v1`) y use los endpoints anteriores. Campos JSON recomendados para citas: `patient_name`, `phone`, `email`, `specialty_slug`, `preferred_date`, `preferred_time`, `message`, `availability_slot_id` (opcional).
+
+## Pruebas
+
+```bash
+pytest
 ```
-MONGODB_URI=mongodb://localhost:27017/eje-salud
-JWT_SECRET=clave_super_secreta
-JWT_EXPIRES_IN=7d
-PORT=5000
-```
 
-> El servidor corre en **http://localhost:5000**
+## Producción
 
----
-
-## Ejemplo: agendar una cita (POST /api/citas)
-
-```json
-// Headers: Authorization: Bearer <token>
-{
-  "medico": "64abc123...",
-  "especialidad": "Psicología",
-  "fecha": "2026-05-20",
-  "hora": "10:00",
-  "motivo": "Primera consulta por ansiedad generalizada"
-}
-```
-
-Respuesta:
-```json
-{
-  "ok": true,
-  "mensaje": "Cita agendada exitosamente.",
-  "cita": {
-    "_id": "...",
-    "especialidad": "Psicología",
-    "fecha": "2026-05-20T00:00:00.000Z",
-    "hora": "10:00",
-    "estado": "pendiente"
-  }
-}
-```
+Use MySQL gestionado (o réplicas/backups acordes), secreto JWT fuerte, HTTPS delante de un proxy y **no** dependa de `ADMIN_BOOTSTRAP_*` salvo el primer despliegue; cree usuarios admin de forma controlada.
