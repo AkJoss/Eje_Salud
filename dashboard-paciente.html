@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi cuenta – EjeSalud</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="dashboard-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">Eje<span>Salud</span></div>
+      <div class="sidebar-role-badge"><i class="fas fa-user me-1"></i>Paciente</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Principal</div>
+      <a href="dashboard-paciente.html" class="sidebar-link active">
+        <i class="fas fa-th-large"></i>Dashboard
+      </a>
+      <a href="agendar-cita.html" class="sidebar-link">
+        <i class="fas fa-calendar-plus"></i>Agendar cita
+      </a>
+      <a href="mis-citas.html" class="sidebar-link">
+        <i class="fas fa-calendar-alt"></i>Mis citas
+      </a>
+      <div class="sidebar-section-title">Cuenta</div>
+      <a href="#" class="sidebar-link"><i class="fas fa-user-circle"></i>Mi perfil</a>
+      <a href="#" class="sidebar-link"><i class="fas fa-bell"></i>Notificaciones</a>
+      <a href="#" class="sidebar-link" data-action="logout"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" data-user-initials="?">?</div>
+      <div>
+        <div class="sidebar-user-name" data-user-name>Cargando...</div>
+        <div class="sidebar-user-email" data-user-email></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button id="sidebarToggle" class="d-md-none btn border-0 p-1">
+          <i class="fas fa-bars text-primary"></i>
+        </button>
+        <span class="topbar-title">Dashboard</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span style="font-size:.85rem;color:var(--text-gray)">Lunes, 4 de mayo de 2026</span>
+        <a href="agendar-cita.html" class="btn-primary-custom" style="font-size:.85rem">
+          <i class="fas fa-plus me-1"></i>Nueva cita
+        </a>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- Bienvenida -->
+      <div class="dash-card mb-4" style="background:linear-gradient(135deg,var(--primary-dark),var(--primary-light))">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <div>
+            <h4 style="color:#fff;margin-bottom:6px">¡Bienvenido, <span data-user-name>...</span>! 👋</h4>
+            <p style="color:rgba(255,255,255,.8);margin:0;font-size:.9rem">Aquí puedes ver y gestionar todas tus citas médicas.</p>
+          </div>
+          <a href="agendar-cita.html" class="btn-white-custom">
+            <i class="fas fa-calendar-plus me-2"></i>Agendar nueva cita
+          </a>
+        </div>
+      </div>
+
+      <!-- Métricas -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="dash-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="dash-card-title">Próximas citas</div>
+                <div class="dash-metric">2</div>
+              </div>
+              <div class="dash-icon dash-icon-blue"><i class="fas fa-calendar-check"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dash-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="dash-card-title">Citas atendidas</div>
+                <div class="dash-metric">1</div>
+              </div>
+              <div class="dash-icon dash-icon-green"><i class="fas fa-check-circle"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dash-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="dash-card-title">Canceladas</div>
+                <div class="dash-metric">1</div>
+              </div>
+              <div class="dash-icon dash-icon-orange"><i class="fas fa-times-circle"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dash-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="dash-card-title">Áreas visitadas</div>
+                <div class="dash-metric">3</div>
+              </div>
+              <div class="dash-icon dash-icon-purple"><i class="fas fa-hospital"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Próxima cita destacada -->
+        <div class="col-lg-7">
+          <div class="dash-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="mb-0" style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--primary-dark)">Próxima cita</h6>
+              <a href="mis-citas.html" style="font-size:.83rem">Ver todas</a>
+            </div>
+            <div style="background:var(--light);border-radius:var(--radius);padding:20px">
+              <div class="d-flex align-items-center gap-3">
+                <div style="background:var(--primary);color:#fff;border-radius:12px;padding:12px 16px;text-align:center;min-width:64px">
+                  <div style="font-size:1.6rem;font-weight:800;font-family:'Nunito',sans-serif;line-height:1">12</div>
+                  <div style="font-size:.7rem;font-weight:700">MAY</div>
+                </div>
+                <div>
+                  <div style="font-weight:700;color:var(--primary-dark);font-size:1rem">Medicina General</div>
+                  <div style="font-size:.85rem;color:var(--text-gray)"><i class="fas fa-user-md me-1"></i>Dr. Carlos Medina</div>
+                  <div style="font-size:.85rem;color:var(--text-gray)"><i class="fas fa-clock me-1"></i>09:00 hrs</div>
+                </div>
+                <span class="badge-status badge-confirmada ms-auto">Confirmada</span>
+              </div>
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn-outline-primary-custom" style="font-size:.82rem;padding:7px 18px"
+                  onclick="openMoverModal(1)">
+                  <i class="fas fa-calendar-alt me-1"></i>Mover cita
+                </button>
+                <button style="border:1.5px solid #C62828;color:#C62828;background:transparent;border-radius:50px;font-size:.82rem;font-weight:600;padding:7px 18px;cursor:pointer"
+                  onclick="cancelarCita(1)">
+                  <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+              </div>
+            </div>
+
+            <h6 class="mt-4 mb-3" style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--primary-dark)">Accesos rápidos</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <a href="agendar-cita.html" class="d-flex align-items-center gap-2 p-3 rounded-3"
+                   style="background:var(--light);text-decoration:none;transition:.2s" onmouseover="this.style.background='var(--light-gray)'" onmouseout="this.style.background='var(--light)'">
+                  <div class="dash-icon dash-icon-blue" style="width:36px;height:36px"><i class="fas fa-plus" style="font-size:.9rem"></i></div>
+                  <span style="font-size:.88rem;font-weight:600;color:var(--primary-dark)">Agendar cita</span>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="mis-citas.html" class="d-flex align-items-center gap-2 p-3 rounded-3"
+                   style="background:var(--light);text-decoration:none;transition:.2s" onmouseover="this.style.background='var(--light-gray)'" onmouseout="this.style.background='var(--light)'">
+                  <div class="dash-icon dash-icon-blue" style="width:36px;height:36px"><i class="fas fa-list" style="font-size:.9rem"></i></div>
+                  <span style="font-size:.88rem;font-weight:600;color:var(--primary-dark)">Ver mis citas</span>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="servicios.html" class="d-flex align-items-center gap-2 p-3 rounded-3"
+                   style="background:var(--light);text-decoration:none;transition:.2s" onmouseover="this.style.background='var(--light-gray)'" onmouseout="this.style.background='var(--light)'">
+                  <div class="dash-icon dash-icon-purple" style="width:36px;height:36px"><i class="fas fa-hospital" style="font-size:.9rem"></i></div>
+                  <span style="font-size:.88rem;font-weight:600;color:var(--primary-dark)">Servicios</span>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="contacto.html" class="d-flex align-items-center gap-2 p-3 rounded-3"
+                   style="background:var(--light);text-decoration:none;transition:.2s" onmouseover="this.style.background='var(--light-gray)'" onmouseout="this.style.background='var(--light)'">
+                  <div class="dash-icon dash-icon-green" style="width:36px;height:36px"><i class="fas fa-phone" style="font-size:.9rem"></i></div>
+                  <span style="font-size:.88rem;font-weight:600;color:var(--primary-dark)">Contacto</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial reciente -->
+        <div class="col-lg-5">
+          <div class="dash-card" style="height:100%">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="mb-0" style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--primary-dark)">Historial reciente</h6>
+              <a href="mis-citas.html" style="font-size:.83rem">Ver todo</a>
+            </div>
+            <div class="cita-card confirmada">
+              <div class="cita-date-box"><div class="cita-day">12</div><div class="cita-month">MAY</div></div>
+              <div class="cita-info">
+                <div class="cita-area">Medicina General</div>
+                <div class="cita-doctor">Dr. Carlos Medina</div>
+                <div class="cita-time">09:00 hrs</div>
+              </div>
+              <span class="badge-status badge-confirmada">Confirmada</span>
+            </div>
+            <div class="cita-card pendiente">
+              <div class="cita-date-box"><div class="cita-day">20</div><div class="cita-month">MAY</div></div>
+              <div class="cita-info">
+                <div class="cita-area">Odontología</div>
+                <div class="cita-doctor">Dra. Paola Vega</div>
+                <div class="cita-time">11:00 hrs</div>
+              </div>
+              <span class="badge-status badge-pendiente">Pendiente</span>
+            </div>
+            <div class="cita-card atendida">
+              <div class="cita-date-box"><div class="cita-day">15</div><div class="cita-month">ABR</div></div>
+              <div class="cita-info">
+                <div class="cita-area">Psicología</div>
+                <div class="cita-doctor">Dra. Valeria Soto</div>
+                <div class="cita-time">10:00 hrs</div>
+              </div>
+              <span class="badge-status badge-atendida">Atendida</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Mover Cita -->
+<div class="modal fade modal-custom" id="moverCitaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Reprogramar cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label-custom">Nueva fecha</label>
+          <input type="date" id="nuevaFecha" class="form-control-custom future-only"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-custom">Nueva hora</label>
+          <select id="nuevaHora" class="form-control-custom">
+            <option value="">Selecciona hora…</option>
+            <option>09:00</option><option>09:30</option><option>10:00</option>
+            <option>10:30</option><option>11:00</option><option>11:30</option>
+            <option>12:00</option><option>14:00</option><option>14:30</option>
+            <option>15:00</option><option>15:30</option><option>16:00</option>
+            <option>16:30</option><option>17:00</option>
+          </select>
+        </div>
+        <div class="alert-info-custom">
+          <i class="fas fa-info-circle me-2"></i>Recibirás confirmación por correo electrónico.
+        </div>
+      </div>
+      <div class="modal-footer border-0 px-4 pb-4">
+        <button class="btn-outline-primary-custom" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-primary-custom" onclick="confirmarMoverCita()">
+          <i class="fas fa-check me-1"></i>Confirmar cambio
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar Sesión – EjeSalud</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+    <a href="index.html" class="auth-brand d-block text-decoration-none">Eje<span>Salud</span></a>
+    <p class="text-center mb-4" style="color:var(--medium-text);font-size:.88rem">Bienvenido — ingresa a tu cuenta</p>
+
+    <!-- Tabs rol -->
+    <div class="role-tabs mb-3">
+      <button class="role-tab-btn active" data-role="paciente">
+        <i class="fas fa-user me-1"></i>Paciente
+      </button>
+      <button class="role-tab-btn" data-role="medico">
+        <i class="fas fa-user-md me-1"></i>Médico
+      </button>
+    </div>
+    <input type="hidden" id="roleInput" value="paciente"/>
+
+    <form id="loginForm" novalidate>
+      <div class="mb-3">
+        <label class="label-es">Correo electrónico</label>
+        <input id="emailInput" type="email" class="form-control-es form-control" placeholder="tu.correo@email.com" required/>
+      </div>
+      <div class="mb-4">
+        <label class="label-es">Contraseña</label>
+        <input id="passwordInput" type="password" class="form-control-es form-control" placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn btn-consultation w-100" style="border-radius:8px;padding:.75rem">
+        Iniciar Sesión
+      </button>
+    </form>
+
+    <p class="text-center mt-4" style="font-size:.85rem;color:var(--medium-text)">
+      ¿No tienes cuenta? <a href="registro.html" style="color:var(--primary);font-weight:600">Regístrate aquí</a>
+    </p>
+    <p class="text-center mt-2">
+      <a href="index.html" style="font-size:.82rem;color:var(--medium-text)">
+        <i class="fas fa-arrow-left me-1"></i>Volver al inicio
+      </a>
+    </p>
+  </div>
+</div>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EjeSalud – Hospital Eje Central</title>
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="assets/css/aos.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="assets/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="preloader"><div class="loader"><div class="loader-circle"></div></div></div>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">EjeSalud</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+        <li class="nav-item"><a class="nav-link" href="#galeria">Galería</a></li>
+        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-consultation" href="login.html">Agendar Cita</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero-section" id="inicio">
+  <div class="container">
+    <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+      <h1>Salud de Calidad con<br>Precisión & Cuidado</h1>
+      <p class="hero-subtitle">En EjeSalud combinamos experiencia médica con tecnología de vanguardia para brindarte atención integral en un entorno seguro y acogedor.</p>
+      <div>
+        <a href="login.html" class="btn btn-hero btn-primary-hero">Agendar Cita</a>
+        <a href="#servicios" class="btn btn-hero btn-outline-hero">Ver Servicios</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about-section section-padding" id="nosotros">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+        <div class="doctor-img">
+          <img src="assets/images/images/Johnson.jpeg" alt="Equipo médico EjeSalud"/>
+        </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left">
+        <h2>Hospital Eje Central</h2>
+        <p class="text-lead">Más de 15 años brindando atención médica integral en el corazón de la Ciudad de México.</p>
+        <p>Nuestro equipo de especialistas certificados se dedica a ofrecer diagnóstico y tratamiento de alta calidad, combinando tecnología de punta con un trato humano y personalizado para cada paciente.</p>
+        <ul class="credentials mt-4">
+          <li><i class="fas fa-check-circle"></i> Médicos certificados por el Consejo Mexicano de Especialidades</li>
+          <li><i class="fas fa-check-circle"></i> Instalaciones de última generación</li>
+          <li><i class="fas fa-check-circle"></i> Más de 50,000 pacientes atendidos</li>
+          <li><i class="fas fa-check-circle"></i> Atención personalizada 24/7</li>
+          <li><i class="fas fa-check-circle"></i> Plataforma digital para gestión de citas</li>
+        </ul>
+        <a href="contacto.html" class="btn btn-consultation mt-4">Contáctanos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section-padding" id="servicios">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title text-center" data-aos="fade-up">Nuestros Servicios</h2>
+        <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Atención médica integral adaptada a tus necesidades.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+        <div class="service-card">
+          <div class="service-img"><img src="assets/images/images/Examination.jpg" alt="Médico General"/></div>
+          <div class="service-content">
+            <div class="service-icon"><i class="fas fa-stethoscope"></i></div>
+            <h4>Médico General</h4>
+            <p>Consultas preventivas, diagnóstico y tratamiento de enfermedades comunes.</p>
+            <a href="servicios.html" class="btn btn-consultation mt-3" style="font-size:.85rem;padding:.5rem 1.2rem">Ver más</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+        <div class="service-card">
+          <div class="service-img"><img src="assets/images/images/Plastic.avif" alt="Medicina Interna"/></div>
+          <div class="service-content">
+            <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+            <h4>Medicina Interna</h4>
+            <p>Diagnóstico y manejo de enfermedades crónicas y sistémicas complejas.</p>
+            <a href="servicios.html" class="btn btn-consultation mt-3" style="font-size:.85rem;padding:.5rem 1.2rem">Ver más</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+        <div class="service-card">
+          <div class="service-img"><img src="assets/images/images/Dermatology.jpg" alt="Psicología"/></div>
+          <div class="service-content">
+            <div class="service-icon"><i class="fas fa-brain"></i></div>
+            <h4>Psicología</h4>
+            <p>Atención psicológica con enfoque cognitivo-conductual para adultos y jóvenes.</p>
+            <a href="servicios.html" class="btn btn-consultation mt-3" style="font-size:.85rem;padding:.5rem 1.2rem">Ver más</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+        <div class="service-card">
+          <div class="service-img"><img src="assets/images/images/Medical.avif" alt="Radiología"/></div>
+          <div class="service-content">
+            <div class="service-icon"><i class="fas fa-x-ray"></i></div>
+            <h4>Radiología</h4>
+            <p>Diagnóstico por imagen con equipo digital de alta resolución.</p>
+            <a href="servicios.html" class="btn btn-consultation mt-3" style="font-size:.85rem;padding:.5rem 1.2rem">Ver más</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="benefits-section section-padding">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title text-center" data-aos="fade-up">¿Por qué elegirnos?</h2>
+        <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Comprometidos con los más altos estándares de atención médica.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-award"></i></div>
+          <h4>Médicos Certificados</h4>
+          <p>Especialistas avalados por los consejos médicos mexicanos con amplia experiencia clínica.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-microscope"></i></div>
+          <h4>Tecnología Avanzada</h4>
+          <p>Equipos de diagnóstico de última generación para resultados precisos y confiables.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+          <h4>Entorno Seguro</h4>
+          <p>Instalaciones con protocolos estrictos de higiene y seguridad para tu tranquilidad.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-user-friends"></i></div>
+          <h4>Atención Personalizada</h4>
+          <p>Escuchamos tus necesidades y diseñamos planes de tratamiento a tu medida.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section-padding" id="galeria">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title text-center" data-aos="fade-up">Nuestras Instalaciones</h2>
+        <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Espacios modernos diseñados para tu comodidad y bienestar.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-6" data-aos="flip-left" data-aos-delay="100">
+        <div class="gallery-item">
+          <img src="assets/images/images/Rhinoplasty.jpeg" alt="Consultorios" class="gallery-img"/>
+          <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6" data-aos="flip-left" data-aos-delay="200">
+        <div class="gallery-item">
+          <img src="assets/images/images/Facelift.avif" alt="Área de espera" class="gallery-img"/>
+          <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6" data-aos="flip-left" data-aos-delay="300">
+        <div class="gallery-item">
+          <img src="assets/images/images/Botox.avif" alt="Laboratorio" class="gallery-img"/>
+          <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="benefits-section section-padding">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title text-center" data-aos="fade-up">Testimonios de Pacientes</h2>
+        <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Lo que dicen nuestros pacientes sobre su experiencia.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4" data-aos="fade-right">
+        <div class="testimonial-card">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"El Dr. Medina es extraordinario. Se tomó el tiempo para entender mi situación y el diagnóstico fue preciso. Me siento muy bien atendida. ¡Definitivamente regreso!"</p>
+          <div class="client-info">
+            <div class="client-avatar"><img src="assets/images/images/32.jpg" alt="María G."/></div>
+            <div><h5>María G.</h5><p>Paciente de Medicina Interna</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-up">
+        <div class="testimonial-card">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"El personal de EjeSalud me hizo sentir cómoda desde el primer momento. Las citas son puntuales y la atención es de primera. La plataforma para agendar es muy fácil."</p>
+          <div class="client-info">
+            <div class="client-avatar"><img src="assets/images/images/44.jpg" alt="Andrea S."/></div>
+            <div><h5>Andrea S.</h5><p>Paciente de Psicología</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-left">
+        <div class="testimonial-card">
+          <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p>"Gracias a EjeSalud pude recibir atención rápida y profesional. Los estudios de radiología fueron claros y el médico me explicó todo con detalle. Muy recomendado."</p>
+          <div class="client-info">
+            <div class="client-avatar"><img src="assets/images/images/68.jpg" alt="Roberto M."/></div>
+            <div><h5>Roberto M.</h5><p>Paciente de Radiología</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8" data-aos="zoom-in">
+        <h2>¿Listo para cuidar tu salud?</h2>
+        <p class="text-lead mb-4" style="color:rgba(255,255,255,.9)">Agenda una consulta con nuestros especialistas certificados y da el primer paso hacia tu bienestar.</p>
+        <a href="login.html" class="btn btn-cta">Agendar Cita Hoy</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <a class="footer-brand" href="index.html">Eje<span>Salud</span></a>
+        <p>Brindando atención médica excepcional con enfoque en la seguridad y el bienestar integral del paciente desde 2010.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3">
+        <h5 class="text-white mb-3">Navegación</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-3">
+        <h5 class="text-white mb-3">Servicios</h5>
+        <ul class="footer-links">
+          <li><a href="servicios.html">Médico General</a></li>
+          <li><a href="servicios.html">Medicina Interna</a></li>
+          <li><a href="servicios.html">Psicología</a></li>
+          <li><a href="servicios.html">Radiología</a></li>
+          <li><a href="servicios.html">Podología</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <h5 class="text-white mb-3">Contacto</h5>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt me-2"></i>Av. Eje Central Lázaro Cárdenas 100, CDMX</li>
+          <li><i class="fas fa-phone-alt me-2"></i>(55) 5000-0000</li>
+          <li><i class="fas fa-envelope me-2"></i>contacto@ejsalud.mx</li>
+          <li><i class="fas fa-clock me-2"></i>Lun–Vie: 8:00–20:00 hrs</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="copyright">
+          <p>&copy; 2026 EjeSalud – Hospital Eje Central. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body text-center p-0">
+        <img id="modalImage" src="" class="img-fluid rounded"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/aos.js"></script>
+<script>
+  window.addEventListener('load', () => {
+    const p = document.getElementById('preloader');
+    p.style.transition = 'opacity .5s';
+    p.style.opacity = '0';
+    setTimeout(() => p.style.display = 'none', 500);
+  });
+  AOS.init({ duration: 700, easing: 'ease-in-out', once: true, offset: 60 });
+  window.addEventListener('scroll', () => {
+    document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('scrollTop').classList.toggle('active', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  // Gallery modal
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const src = item.querySelector('img').src;
+      document.getElementById('modalImage').src = src;
+      new bootstrap.Modal(document.getElementById('imageModal')).show();
+    });
+  });
+</script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

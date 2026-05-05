@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacto – EjeSalud</title>
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="assets/css/aos.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="assets/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="preloader"><div class="loader"><div class="loader-circle"></div></div></div>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Eje<span>Salud</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+        <li class="nav-item"><a class="nav-link active" href="contacto.html">Contacto</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0"><a class="btn btn-consultation" href="login.html">Agendar Cita</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 data-aos="fade-up">Contáctanos</h1>
+    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+        <li class="breadcrumb-item active">Contacto</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5" data-aos="fade-right">
+        <h2>Estamos aquí para ayudarte</h2>
+        <p class="text-muted mt-3 mb-4">¿Tienes dudas sobre nuestros servicios o necesitas más información? Contáctanos por cualquiera de estos medios.</p>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div><h5>Dirección</h5><p>Av. Eje Central Lázaro Cárdenas 100, Col. Centro, CDMX</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+          <div><h5>Teléfono</h5><p>(55) 5000-0000<br>(55) 5000-0001</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div><h5>Correo</h5><p>contacto@ejsalud.mx<br>citas@ejsalud.mx</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div><h5>Horario</h5><p>Lunes – Viernes: 8:00 – 20:00 hrs<br>Sábado: 9:00 – 14:00 hrs</p></div>
+        </div>
+        <div class="map-container mt-4">
+          <iframe src="https://maps.google.com/maps?q=Eje+Central+Lazaro+Cardenas+CDMX&output=embed" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="col-lg-7" data-aos="fade-left">
+        <div class="contact-form">
+          <h3 style="color:var(--primary-dark);font-family:'Playfair Display',serif;margin-bottom:1.5rem">Envíanos un mensaje</h3>
+          <form id="contactForm" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="label-es">Nombre</label>
+                <input type="text" class="form-control" placeholder="Tu nombre" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="label-es">Correo electrónico</label>
+                <input type="email" class="form-control" placeholder="tu@email.com" required/>
+              </div>
+              <div class="col-12">
+                <label class="label-es">Asunto</label>
+                <input type="text" class="form-control" placeholder="¿En qué podemos ayudarte?" required/>
+              </div>
+              <div class="col-12">
+                <label class="label-es">Mensaje</label>
+                <textarea class="form-control" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-consultation w-100" style="border-radius:8px;padding:.8rem">
+                  <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <a class="footer-brand" href="index.html">Eje<span>Salud</span></a>
+        <p>Hospital Eje Central – comprometidos con tu bienestar desde 2010.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3">
+        <h5 class="text-white mb-3">Servicios</h5>
+        <ul class="footer-links">
+          <li><a href="servicios.html">Médico General</a></li>
+          <li><a href="servicios.html">Medicina Interna</a></li>
+          <li><a href="servicios.html">Psicología</a></li>
+          <li><a href="servicios.html">Radiología</a></li>
+          <li><a href="servicios.html">Podología</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3">
+        <h5 class="text-white mb-3">Acceso</h5>
+        <ul class="footer-links">
+          <li><a href="login.html">Iniciar Sesión</a></li>
+          <li><a href="registro.html">Registrarse</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <h5 class="text-white mb-3">Contacto</h5>
+        <ul class="footer-links">
+          <li><i class="fas fa-map-marker-alt me-2"></i>Av. Eje Central 100, CDMX</li>
+          <li><i class="fas fa-phone-alt me-2"></i>(55) 5000-0000</li>
+          <li><i class="fas fa-envelope me-2"></i>contacto@ejsalud.mx</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row"><div class="col-12">
+      <div class="copyright"><p>&copy; 2026 EjeSalud – Hospital Eje Central. Todos los derechos reservados.</p></div>
+    </div></div>
+  </div>
+</footer>
+
+<div class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></div>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/aos.js"></script>
+<script>
+  window.addEventListener('load',()=>{const p=document.getElementById('preloader');p.style.transition='opacity .5s';p.style.opacity='0';setTimeout(()=>p.style.display='none',500);});
+  AOS.init({duration:700,easing:'ease-in-out',once:true,offset:60});
+  window.addEventListener('scroll',()=>{document.querySelector('.navbar').classList.toggle('scrolled',window.scrollY>50);document.getElementById('scrollTop').classList.toggle('active',window.scrollY>300);});
+  document.getElementById('scrollTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  document.getElementById('contactForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const btn=e.target.querySelector('[type=submit]');
+    btn.disabled=true;btn.innerHTML='<span class="spinner-border spinner-border-sm me-2"></span>Enviando…';
+    setTimeout(()=>{
+      btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane me-2"></i>Enviar Mensaje';
+      e.target.reset();
+      // showToast está en main.js
+      if(typeof showToast==='function') showToast('Mensaje enviado. Te contactaremos pronto ✓');
+      else alert('Mensaje enviado. Te contactaremos pronto.');
+    },1200);
+  });
+</script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

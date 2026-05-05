@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro – EjeSalud</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card" style="max-width:520px">
+    <a href="index.html" class="auth-brand d-block text-decoration-none mb-1">Eje<span>Salud</span></a>
+    <p class="text-center mb-4" style="color:var(--medium-text);font-size:.88rem">Crea tu cuenta de paciente</p>
+
+    <form id="registroForm" novalidate>
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="label-es">Nombre <span style="color:red">*</span></label>
+          <input id="nombreInput" type="text" class="form-control-es form-control" placeholder="Ej. Ana" required/>
+        </div>
+        <div class="col-6">
+          <label class="label-es">Apellido <span style="color:red">*</span></label>
+          <input id="apellidoInput" type="text" class="form-control-es form-control" placeholder="Ej. García" required/>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="label-es">Correo electrónico <span style="color:red">*</span></label>
+        <input id="emailInput" type="email" class="form-control-es form-control" placeholder="tu.correo@email.com" required/>
+      </div>
+      <div class="mb-3">
+        <label class="label-es">Teléfono <span style="color:red">*</span></label>
+        <input id="telefonoInput" type="tel" class="form-control-es form-control" placeholder="55 1234-5678" required/>
+      </div>
+      <div class="mb-3">
+        <label class="label-es">Fecha de nacimiento</label>
+        <input id="fechaNacimientoInput" type="date" class="form-control-es form-control"/>
+      </div>
+      <div class="mb-4">
+        <label class="label-es">Contraseña <span style="color:red">*</span></label>
+        <input id="passwordInput" type="password" class="form-control-es form-control" placeholder="Mínimo 6 caracteres" required minlength="6"/>
+      </div>
+      <button type="submit" class="btn btn-consultation w-100" style="border-radius:8px;padding:.75rem">
+        <i class="fas fa-user-plus me-2"></i>Crear Cuenta
+      </button>
+    </form>
+
+    <p class="text-center mt-4" style="font-size:.85rem;color:var(--medium-text)">
+      ¿Ya tienes cuenta? <a href="login.html" style="color:var(--primary);font-weight:600">Inicia sesión</a>
+    </p>
+    <p class="text-center mt-2">
+      <a href="index.html" style="font-size:.82rem;color:var(--medium-text)"><i class="fas fa-arrow-left me-1"></i>Volver al inicio</a>
+    </p>
+  </div>
+</div>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

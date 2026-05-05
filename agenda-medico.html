@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi agenda – EjeSalud</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="dashboard-wrapper">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">Eje<span>Salud</span></div>
+      <div class="sidebar-role-badge"><i class="fas fa-user-md me-1"></i>Médico</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Principal</div>
+      <a href="dashboard-medico.html" class="sidebar-link"><i class="fas fa-th-large"></i>Dashboard</a>
+      <a href="agenda-medico.html" class="sidebar-link active"><i class="fas fa-calendar-week"></i>Mi agenda</a>
+      <div class="sidebar-section-title">Pacientes</div>
+      <a href="#" class="sidebar-link"><i class="fas fa-users"></i>Lista de pacientes</a>
+      <a href="#" class="sidebar-link"><i class="fas fa-file-medical"></i>Expedientes</a>
+      <div class="sidebar-section-title">Cuenta</div>
+      <a href="#" class="sidebar-link"><i class="fas fa-user-circle"></i>Mi perfil</a>
+      <a href="#" class="sidebar-link" data-action="logout"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">CM</div>
+      <div>
+        <div class="sidebar-user-name">Dr. Carlos Medina</div>
+        <div class="sidebar-user-email">Medicina General</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button id="sidebarToggle" class="d-md-none btn border-0 p-1">
+          <i class="fas fa-bars text-primary"></i>
+        </button>
+        <span class="topbar-title">Mi agenda</span>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn-outline-primary-custom" style="font-size:.83rem;padding:7px 16px" id="btnSemana" onclick="switchView('semana')">
+          <i class="fas fa-calendar-week me-1"></i>Semana
+        </button>
+        <button class="btn-primary-custom" style="font-size:.83rem;padding:7px 16px" id="btnLista" onclick="switchView('lista')">
+          <i class="fas fa-list me-1"></i>Lista
+        </button>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- Vista Semana -->
+      <div id="vistasSemana">
+        <div class="dash-card mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h6 class="mb-0" style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--primary-dark)">
+              Semana del 5 al 9 de mayo, 2026
+            </h6>
+            <div class="d-flex gap-2 align-items-center">
+              <div style="display:flex;gap:8px;font-size:.78rem;align-items:center">
+                <span style="width:12px;height:12px;background:var(--success);border-radius:3px;display:inline-block"></span> Confirmada
+                <span style="width:12px;height:12px;background:var(--secondary);border-radius:3px;display:inline-block;margin-left:8px"></span> Pendiente
+              </div>
+            </div>
+          </div>
+          <div class="week-calendar">
+            <div class="week-grid">
+              <!-- Headers -->
+              <div class="week-header time-col"></div>
+              <div class="week-header">Lun 5</div>
+              <div class="week-header">Mar 6</div>
+              <div class="week-header">Mié 7</div>
+              <div class="week-header">Jue 8</div>
+              <div class="week-header">Vie 9</div>
+              <!-- 09:00 -->
+              <div class="week-time">09:00</div>
+              <div class="week-cell"><div class="week-event confirmada" onclick="openDetalleCita(10)">Juan Pérez<br/>09:00</div></div>
+              <div class="week-cell"><div class="week-event confirmada" onclick="openDetalleCita(13)">Carmen Ruiz<br/>09:00</div></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 09:30 -->
+              <div class="week-time">09:30</div>
+              <div class="week-cell"><div class="week-event confirmada" onclick="openDetalleCita(11)">M. González<br/>09:30</div></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 10:00 -->
+              <div class="week-time">10:00</div>
+              <div class="week-cell"><div class="week-event pendiente" onclick="openDetalleCita(12)">R. Leal<br/>10:00</div></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 10:30 -->
+              <div class="week-time">10:30</div>
+              <div class="week-cell"></div>
+              <div class="week-cell"><div class="week-event pendiente" onclick="openDetalleCita(14)">A. Mora<br/>10:30</div></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 11:00 -->
+              <div class="week-time">11:00</div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 14:00 -->
+              <div class="week-time">14:00</div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <!-- 15:00 -->
+              <div class="week-time">15:00</div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+              <div class="week-cell"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista Lista -->
+      <div id="vistaLista" style="display:none">
+        <div class="dash-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h6 class="mb-0" style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--primary-dark)">
+              Todas mis citas
+            </h6>
+            <select class="form-control-custom" style="width:auto;font-size:.83rem">
+              <option>Esta semana</option>
+              <option>Este mes</option>
+              <option>Próximas</option>
+            </select>
+          </div>
+          <div id="agendaMedicoList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal detalle de cita (médico) -->
+<div class="modal fade modal-custom" id="detalleCitaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-file-medical me-2"></i>Detalle de cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" id="detalleCitaContent"></div>
+      <div class="modal-footer border-0 px-4 pb-4">
+        <button class="btn-outline-primary-custom" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn-primary-custom" onclick="marcarAtendidaModal()">
+          <i class="fas fa-check me-1"></i>Marcar como atendida
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+let citaModalId = null;
+
+function switchView(view) {
+  const semana = document.getElementById('vistasSemana');
+  const lista  = document.getElementById('vistaLista');
+  const btnS   = document.getElementById('btnSemana');
+  const btnL   = document.getElementById('btnLista');
+  if (view === 'semana') {
+    semana.style.display = 'block'; lista.style.display = 'none';
+    btnS.className = 'btn-primary-custom'; btnS.style.cssText='font-size:.83rem;padding:7px 16px';
+    btnL.className = 'btn-outline-primary-custom'; btnL.style.cssText='font-size:.83rem;padding:7px 16px';
+  } else {
+    semana.style.display = 'none'; lista.style.display = 'block';
+    btnL.className = 'btn-primary-custom'; btnL.style.cssText='font-size:.83rem;padding:7px 16px';
+    btnS.className = 'btn-outline-primary-custom'; btnS.style.cssText='font-size:.83rem;padding:7px 16px';
+  }
+}
+
+function openDetalleCita(id) {
+  citaModalId = id;
+  const cita = MOCK.citasMedico.find(c => c.id === id);
+  if (!cita) return;
+  document.getElementById('detalleCitaContent').innerHTML = `
+    <div class="row g-3">
+      <div class="col-6">
+        <div class="form-label-custom">Paciente</div>
+        <div style="font-weight:600;color:var(--primary-dark)">${cita.paciente}</div>
+      </div>
+      <div class="col-6">
+        <div class="form-label-custom">Edad</div>
+        <div style="font-weight:600;color:var(--primary-dark)">${cita.edad} años</div>
+      </div>
+      <div class="col-6">
+        <div class="form-label-custom">Área</div>
+        <div style="font-weight:600;color:var(--primary-dark)">${cita.area}</div>
+      </div>
+      <div class="col-6">
+        <div class="form-label-custom">Estado</div>
+        <span class="badge-status badge-${cita.estado}">${cita.estado.charAt(0).toUpperCase()+cita.estado.slice(1)}</span>
+      </div>
+      <div class="col-6">
+        <div class="form-label-custom">Fecha</div>
+        <div style="font-weight:600;color:var(--primary-dark)">${cita.fecha}</div>
+      </div>
+      <div class="col-6">
+        <div class="form-label-custom">Hora</div>
+        <div style="font-weight:600;color:var(--primary-dark)">${cita.hora} hrs</div>
+      </div>
+    </div>
+    <hr/>
+    <div class="form-label-custom">Notas de la consulta</div>
+    <textarea class="form-control-custom" rows="3" placeholder="Escribe tus notas médicas aquí…"></textarea>`;
+  new bootstrap.Modal(document.getElementById('detalleCitaModal')).show();
+}
+
+function marcarAtendidaModal() {
+  if (citaModalId) {
+    marcarAtendida(citaModalId);
+    bootstrap.Modal.getInstance(document.getElementById('detalleCitaModal'))?.hide();
+  }
+}
+</script>
+</body>
+</html>
