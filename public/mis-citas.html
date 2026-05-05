@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas | Eje Salud</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        .page-section {
+            min-height: 100vh;
+            padding: 120px 0 60px;
+            background: linear-gradient(135deg, #fdf6f8 0%, #f9f0f3 100%);
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2b2b2b;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        /* Filtros de estado */
+        .filtros-estado {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .filtro-btn {
+            border: 1.5px solid #e8d5da;
+            background: #fff;
+            color: #888;
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filtro-btn:hover,
+        .filtro-btn.active {
+            background: #a36a7b;
+            border-color: #a36a7b;
+            color: #fff;
+        }
+
+        /* Tarjetas de cita */
+        .cita-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(163, 106, 123, 0.08);
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            border-left: 4px solid #e8d5da;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cita-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(163, 106, 123, 0.13);
+        }
+
+        .cita-card.pendiente {
+            border-left-color: #f0a500;
+        }
+
+        .cita-card.confirmada {
+            border-left-color: #27ae60;
+        }
+
+        .cita-card.cancelada {
+            border-left-color: #e74c3c;
+            opacity: 0.7;
+        }
+
+        .cita-card.completada {
+            border-left-color: #a36a7b;
+        }
+
+        .cita-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .cita-especialidad {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #2b2b2b;
+            font-weight: 600;
+        }
+
+        .badge-estado {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 20px;
+            text-transform: capitalize;
+        }
+
+        .badge-pendiente {
+            background: #fff8e1;
+            color: #f0a500;
+        }
+
+        .badge-confirmada {
+            background: #e8f8f0;
+            color: #27ae60;
+        }
+
+        .badge-cancelada {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+
+        .badge-completada {
+            background: #f3eef5;
+            color: #a36a7b;
+        }
+
+        .cita-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .cita-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cita-info-item i {
+            color: #c58aa0;
+            width: 16px;
+        }
+
+        .cita-motivo {
+            background: #fdf6f8;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .cita-motivo span {
+            font-weight: 600;
+            color: #444;
+        }
+
+        .btn-cancelar {
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            background: transparent;
+            border-radius: 8px;
+            padding: 7px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancelar:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #e8d5da;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h5 {
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f5eef0 25%, #ecdde1 50%, #f5eef0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 8px;
+            height: 20px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(163, 106, 123, 0.06);
+        }
+
+        /* Modal confirmación */
+        .modal-confirmar .modal-content {
+            border-radius: 14px;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-confirmar .modal-header {
+            border-bottom: 1px solid #f5eef0;
+            padding: 20px 24px;
+        }
+
+        .modal-confirmar .modal-footer {
+            border-top: 1px solid #f5eef0;
+            padding: 16px 24px;
+        }
+
+        .btn-confirmar-cancelar {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 22px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-confirmar-cancelar:hover {
+            opacity: 0.88;
+            color: #fff;
+        }
+
+        /* Resumen stats */
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .stat-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            box-shadow: 0 2px 12px rgba(163, 106, 123, 0.07);
+            text-align: center;
+            min-width: 100px;
+            flex: 1;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #a36a7b;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: #aaa;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Eje Salud</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#about">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#services">Especialidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="consultation.html">Agendar Cita</a></li>
+                    <!-- Sin sesión -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-login">
+                        <a class="btn btn-consultation" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <!-- Con sesión -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-usuario"
+                        style="display:none; align-items:center; gap:12px;">
+                        <span style="color:#a36a7b; font-weight:600;">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="nav-nombre"></span>
+                        </span>
+                        <a class="nav-link" href="mis-citas.html" id="nav-mis-citas">Mis Citas</a>
+                        <a class="btn btn-outline-danger btn-sm" href="#" id="nav-logout">Salir</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <section class="page-section">
+        <div class="container">
+
+            <div class="page-header" data-aos="fade-up">
+                <h2 id="titulo-pagina">Mis Citas</h2>
+                <p id="subtitulo-pagina">Consulta y gestiona tus citas médicas</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-bar" id="stats-bar" data-aos="fade-up" style="display:none !important;">
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-total">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-pendientes">0</div>
+                    <div class="stat-label">Pendientes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-confirmadas">0</div>
+                    <div class="stat-label">Confirmadas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-completadas">0</div>
+                    <div class="stat-label">Completadas</div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filtros-estado" id="filtros" style="display:none;">
+                <button class="filtro-btn active" data-filtro="todas">Todas</button>
+                <button class="filtro-btn" data-filtro="pendiente">Pendientes</button>
+                <button class="filtro-btn" data-filtro="confirmada">Confirmadas</button>
+                <button class="filtro-btn" data-filtro="completada">Completadas</button>
+                <button class="filtro-btn" data-filtro="cancelada">Canceladas</button>
+            </div>
+
+            <!-- Lista de citas -->
+            <div id="citas-container">
+                <!-- Skeletons de carga -->
+                <div id="skeletons">
+                    <div class="skeleton-card">
+                        <div class="skeleton" style="width:40%"></div>
+                        <div class="skeleton" style="width:70%"></div>
+                        <div class="skeleton" style="width:55%"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton" style="width:35%"></div>
+                        <div class="skeleton" style="width:65%"></div>
+                        <div class="skeleton" style="width:50%"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton" style="width:45%"></div>
+                        <div class="skeleton" style="width:60%"></div>
+                        <div class="skeleton" style="width:40%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón nueva cita -->
+            <div class="text-center mt-4" id="btn-nueva-cita" style="display:none;">
+                <a href="consultation.html" class="btn btn-consultation">
+                    <i class="fas fa-plus me-2"></i>Agendar nueva cita
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal confirmar cancelación -->
+    <div class="modal fade modal-confirmar" id="modalCancelar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Cancelar cita
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 py-3">
+                    <p class="mb-1">¿Estás seguro de que deseas cancelar esta cita?</p>
+                    <p class="text-muted small" id="modal-detalle-cita"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">No,
+                        mantener</button>
+                    <button type="button" class="btn-confirmar-cancelar btn" id="btn-confirmar-cancelar">
+                        <span id="cancelar-btn-text">Sí, cancelar cita</span>
+                        <span id="cancelar-spinner" style="display:none;"><i
+                                class="fas fa-circle-notch fa-spin me-1"></i>Cancelando...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a href="index.html" class="footer-brand">Eje Salud</a>
+                    <p>Atención médica de calidad con un enfoque humano y profesional.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Enlaces</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="consultation.html">Agendar Cita</a></li>
+                        <li><a href="mis-citas.html">Mis Citas</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright">
+                        <p>&copy; 2026 Eje Salud. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top"><i class="fas fa-chevron-up"></i></div>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/aos.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script>
+        // Proteger página — redirige si no está logueado
+        UI.requireAuth();
+
+        let todasLasCitas = [];
+        let citaIdCancelar = null;
+        const modalCancelar = new bootstrap.Modal(document.getElementById('modalCancelar'));
+
+        // ── Formatear fecha legible ──────────────────────────
+        function formatFecha(fechaISO) {
+            const fecha = new Date(fechaISO);
+            return fecha.toLocaleDateString('es-MX', {
+                weekday: 'long', year: 'numeric',
+                month: 'long', day: 'numeric'
+            });
+        }
+
+        // ── Badge de estado ──────────────────────────────────
+        function badgeEstado(estado) {
+            return `<span class="badge-estado badge-${estado}">${estado}</span>`;
+        }
+
+        // ── Ícono por especialidad ───────────────────────────
+        function iconoEspecialidad(esp) {
+            const iconos = {
+                'Médico General': 'fa-stethoscope',
+                'Medicina Interna': 'fa-heartbeat',
+                'Psicología': 'fa-brain',
+                'Podología': 'fa-shoe-prints',
+                'Radiología': 'fa-x-ray',
+            };
+            return iconos[esp] || 'fa-user-md';
+        }
+
+        // ── Renderizar citas ─────────────────────────────────
+        function renderCitas(citas) {
+            const container = document.getElementById('citas-container');
+
+            if (citas.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h5>No hay citas para mostrar</h5>
+                        <p>No tienes citas en esta categoría.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = citas.map(cita => {
+                const puedeCancelar = ['pendiente', 'confirmada'].includes(cita.estado);
+                const medico = cita.medico
+                    ? `Dr. ${cita.medico.nombre} ${cita.medico.apellido}`
+                    : 'Médico asignado';
+
+                return `
+                <div class="cita-card ${cita.estado}" data-aos="fade-up">
+                    <div class="cita-header">
+                        <div class="cita-especialidad">
+                            <i class="fas ${iconoEspecialidad(cita.especialidad)} me-2" style="color:#c58aa0;"></i>
+                            ${cita.especialidad}
+                        </div>
+                        ${badgeEstado(cita.estado)}
+                    </div>
+                    <div class="cita-info">
+                        <div class="cita-info-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${formatFecha(cita.fecha)}</span>
+                        </div>
+                        <div class="cita-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${cita.hora} hrs</span>
+                        </div>
+                        <div class="cita-info-item">
+                            <i class="fas fa-user-md"></i>
+                            <span>${medico}</span>
+                        </div>
+                    </div>
+                    <div class="cita-motivo">
+                        <span>Motivo:</span> ${cita.motivo}
+                    </div>
+                    ${puedeCancelar ? `
+                    <button class="btn-cancelar" onclick="abrirModalCancelar('${cita._id}', '${cita.especialidad}', '${cita.hora}')">
+                        <i class="fas fa-times me-1"></i>Cancelar cita
+                    </button>` : ''}
+                </div>`;
+            }).join('');
+
+            // Re-init AOS para nuevos elementos
+            AOS.refresh();
+        }
+
+        // ── Actualizar stats ─────────────────────────────────
+        function actualizarStats(citas) {
+            document.getElementById('stat-total').textContent = citas.length;
+            document.getElementById('stat-pendientes').textContent = citas.filter(c => c.estado === 'pendiente').length;
+            document.getElementById('stat-confirmadas').textContent = citas.filter(c => c.estado === 'confirmada').length;
+            document.getElementById('stat-completadas').textContent = citas.filter(c => c.estado === 'completada').length;
+
+            if (citas.length > 0) {
+                document.getElementById('stats-bar').style.cssText = 'display: flex !important;';
+            }
+        }
+
+        // ── Cargar citas ─────────────────────────────────────
+        async function cargarCitas() {
+            try {
+                const data = await CitasAPI.listar();
+                todasLasCitas = data.citas;
+
+                // Ocultar skeletons
+                document.getElementById('skeletons').style.display = 'none';
+                document.getElementById('filtros').style.display = 'flex';
+                document.getElementById('btn-nueva-cita').style.display = 'block';
+
+                // Admin: cambiar título
+                if (Auth.isAdmin()) {
+                    document.getElementById('titulo-pagina').textContent = 'Todas las Citas';
+                    document.getElementById('subtitulo-pagina').textContent = `${data.total} cita(s) en el sistema`;
+                }
+
+                actualizarStats(todasLasCitas);
+                renderCitas(todasLasCitas);
+
+            } catch (err) {
+                document.getElementById('citas-container').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle" style="color:#e74c3c;"></i>
+                        <h5>Error al cargar las citas</h5>
+                        <p>${err.message}</p>
+                    </div>`;
+            }
+        }
+
+        // ── Filtros ──────────────────────────────────────────
+        document.querySelectorAll('.filtro-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filtro = this.dataset.filtro;
+                const filtradas = filtro === 'todas'
+                    ? todasLasCitas
+                    : todasLasCitas.filter(c => c.estado === filtro);
+
+                renderCitas(filtradas);
+            });
+        });
+
+        // ── Modal cancelar ───────────────────────────────────
+        function abrirModalCancelar(id, especialidad, hora) {
+            citaIdCancelar = id;
+            document.getElementById('modal-detalle-cita').textContent =
+                `${especialidad} — ${hora} hrs`;
+            modalCancelar.show();
+        }
+
+        document.getElementById('btn-confirmar-cancelar').addEventListener('click', async () => {
+            if (!citaIdCancelar) return;
+
+            document.getElementById('cancelar-btn-text').style.display = 'none';
+            document.getElementById('cancelar-spinner').style.display = 'inline';
+            document.getElementById('btn-confirmar-cancelar').disabled = true;
+
+            try {
+                await CitasAPI.cancelar(citaIdCancelar);
+                modalCancelar.hide();
+                await cargarCitas(); // Recargar lista
+            } catch (err) {
+                alert('Error al cancelar: ' + err.message);
+            } finally {
+                document.getElementById('cancelar-btn-text').style.display = 'inline';
+                document.getElementById('cancelar-spinner').style.display = 'none';
+                document.getElementById('btn-confirmar-cancelar').disabled = false;
+                citaIdCancelar = null;
+            }
+        });
+
+        // ── Iniciar ──────────────────────────────────────────
+        cargarCitas();
+    </script>
+</body>
+
+</html>

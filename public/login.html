@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Eje Salud</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        .auth-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 60px;
+            background: linear-gradient(135deg, #fdf6f8 0%, #f9f0f3 100%);
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(163, 106, 123, 0.12);
+            padding: 48px 40px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .auth-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2b2b2b;
+            margin-bottom: 8px;
+        }
+
+        .auth-card .subtitle {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #c58aa0;
+            box-shadow: 0 0 0 3px rgba(197, 138, 160, 0.15);
+        }
+
+        .btn-auth {
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn-auth:hover {
+            opacity: 0.92;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .auth-divider {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin: 20px 0;
+        }
+
+        .auth-link {
+            color: #a36a7b;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-link:hover {
+            color: #c58aa0;
+            text-decoration: underline;
+        }
+
+        .alert-error {
+            background: #fff0f3;
+            border: 1px solid #f5c2cc;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon-wrapper .form-control {
+            padding-left: 42px;
+        }
+
+        .input-icon-wrapper .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #c58aa0;
+            font-size: 0.95rem;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .toggle-password:hover {
+            color: #a36a7b;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Eje Salud</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="consultation.html">Consulta</a>
+                    </li>
+                    <!-- Estado: no logueado -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-login">
+                        <a class="btn btn-consultation" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <!-- Estado: logueado (oculto por defecto) -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-usuario"
+                        style="display:none; align-items:center; gap:12px;">
+                        <span style="color:#a36a7b; font-weight:600;">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="nav-nombre"></span>
+                        </span>
+                        <a class="nav-link" href="mis-citas.html" id="nav-mis-citas">Mis Citas</a>
+                        <a class="btn btn-outline-danger btn-sm" href="#" id="nav-logout">Salir</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-card" data-aos="fade-up">
+                <h2>Bienvenido de vuelta</h2>
+                <p class="subtitle">Inicia sesión para gestionar tus citas médicas</p>
+
+                <div class="alert-error" id="error-msg">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="error-text"></span>
+                </div>
+
+                <div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Correo electrónico</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" class="form-control" id="email" placeholder="tu@correo.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="password">Contraseña</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                            <i class="fas fa-eye toggle-password" id="toggle-pw"></i>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-auth" id="btn-login">
+                        <span id="btn-text">Iniciar Sesión</span>
+                        <span id="btn-spinner" style="display:none;">
+                            <i class="fas fa-circle-notch fa-spin me-2"></i>Entrando...
+                        </span>
+                    </button>
+                </div>
+
+                <div class="auth-divider mt-4">
+                    ¿No tienes cuenta?
+                    <a href="registro.html" class="auth-link">Regístrate aquí</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a href="index.html" class="footer-brand">Eje Salud</a>
+                    <p>Atención médica de calidad con un enfoque humano y profesional.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Enlaces</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="consultation.html">Consulta</a></li>
+                        <li><a href="login.html">Iniciar Sesión</a></li>
+                        <li><a href="registro.html">Registrarse</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright">
+                        <p>&copy; 2026 Eje Salud. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/aos.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script>
+        // Si ya está logueado, redirigir
+        if (Auth.isLoggedIn()) {
+            window.location.href = '/mis-citas.html';
+        }
+
+        // Toggle mostrar/ocultar contraseña
+        document.getElementById('toggle-pw').addEventListener('click', function () {
+            const input = document.getElementById('password');
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            this.className = isText ? 'fas fa-eye toggle-password' : 'fas fa-eye-slash toggle-password';
+        });
+
+        // Login
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const errorTxt = document.getElementById('error-text');
+            const btnText = document.getElementById('btn-text');
+            const btnSpinner = document.getElementById('btn-spinner');
+
+            // Ocultar error previo
+            errorMsg.style.display = 'none';
+
+            if (!email || !password) {
+                errorTxt.textContent = 'Por favor completa todos los campos.';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Loading state
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'inline';
+            document.getElementById('btn-login').disabled = true;
+
+            try {
+                const data = await AuthAPI.login(email, password);
+                // Redirigir según rol
+                if (data.usuario.rol === 'admin') {
+                    window.location.href = '/mis-citas.html';
+                } else {
+                    window.location.href = '/mis-citas.html';
+                }
+            } catch (err) {
+                errorTxt.textContent = err.message || 'Error al iniciar sesión.';
+                errorMsg.style.display = 'block';
+                btnText.style.display = 'inline';
+                btnSpinner.style.display = 'none';
+                document.getElementById('btn-login').disabled = false;
+            }
+        });
+
+        // Permitir Enter para enviar
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('btn-login').click();
+        });
+    </script>
+</body>
+
+</html>
