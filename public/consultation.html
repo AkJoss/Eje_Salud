@@ -1,30 +1,457 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Consultation | Grace Glow</title>
+    <title>Agendar Cita | Eje Salud</title>
     <meta name="description"
-        content="Schedule a personalized cosmetic consultation with board-certified specialists at Grace Glow.">
-
-        <!-- Favicon -->
+        content="Agenda tu cita médica en Eje Salud. Atención profesional en Médico General, Medicina Interna, Psicología, Podología y Radiología.">
     <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
-    <!-- Bootstrap 5 CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- AOS (Animate on Scroll) -->
     <link href="assets/css/aos.css" rel="stylesheet">
-
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        /* ── Hero ── */
+        .consultation-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
+                url("https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80") center/cover no-repeat;
+            color: #fff;
+            padding: 160px 0 100px;
+            text-align: center;
+        }
 
+        /* ── Pasos informativos ── */
+        .consultation-steps {
+            background: #f9f6f8;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 28px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(163, 106, 123, 0.07);
+            transition: transform 0.2s;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-item:hover {
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .step-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2b2b2b;
+            margin: 0 0 4px;
+        }
+
+        .step-item p {
+            color: #888;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        /* ── Formulario principal ── */
+        .consultation-form-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 44px;
+            box-shadow: 0 10px 40px rgba(163, 106, 123, 0.10);
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 576px) {
+            .consultation-form-card {
+                padding: 24px 18px;
+            }
+
+            .consultation-steps {
+                padding: 24px 18px;
+            }
+        }
+
+        .form-section-title {
+            font-family: 'Playfair Display', serif;
+            color: #a36a7b;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-bottom: 2px solid #f0e4e8;
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+        }
+
+        /* ── Tratamientos (especialidades) ── */
+        .treatment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .treatment-option {
+            position: relative;
+        }
+
+        .treatment-option input {
+            display: none;
+        }
+
+        .treatment-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border: 1.5px solid #edd6de;
+            border-radius: 10px;
+            background: #fdf6f8;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.22s;
+            user-select: none;
+        }
+
+        .treatment-label:hover {
+            border-color: #c58aa0;
+            background: #fceef3;
+        }
+
+        .treatment-option input:checked+.treatment-label {
+            background: #a36a7b;
+            border-color: #a36a7b;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(163, 106, 123, 0.25);
+        }
+
+        .treatment-label .esp-icon {
+            font-size: 1.1rem;
+            color: #c58aa0;
+            transition: color 0.22s;
+        }
+
+        .treatment-option input:checked+.treatment-label .esp-icon {
+            color: #fff;
+        }
+
+        /* ── Slots de disponibilidad ── */
+        .availability-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .slot {
+            padding: 10px 6px;
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .slot:hover {
+            border-color: #c58aa0;
+            color: #a36a7b;
+            background: #fdf6f8;
+        }
+
+        .slot.selected {
+            background: #a36a7b;
+            border-color: #a36a7b;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(163, 106, 123, 0.25);
+        }
+
+        .slot.occupied {
+            background: #f5f5f5;
+            color: #ccc;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            border-color: #eee;
+        }
+
+        .slots-loading,
+        .slots-empty {
+            text-align: center;
+            padding: 20px;
+            color: #bbb;
+            font-size: 0.9rem;
+            background: #fdf6f8;
+            border-radius: 10px;
+        }
+
+        /* ── Médico select card ── */
+        .medico-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .medico-option {
+            position: relative;
+        }
+
+        .medico-option input {
+            display: none;
+        }
+
+        .medico-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border: 1.5px solid #edd6de;
+            border-radius: 10px;
+            background: #fdf6f8;
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+
+        .medico-label:hover {
+            border-color: #c58aa0;
+            background: #fceef3;
+        }
+
+        .medico-option input:checked+.medico-label {
+            border-color: #a36a7b;
+            background: #f3eaed;
+            box-shadow: 0 4px 14px rgba(163, 106, 123, 0.12);
+        }
+
+        .medico-avatar-sm {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .medico-label-info h6 {
+            font-weight: 700;
+            color: #2b2b2b;
+            margin: 0 0 2px;
+            font-size: 0.92rem;
+        }
+
+        .medico-label-info p {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .medico-check {
+            margin-left: auto;
+            color: #a36a7b;
+            font-size: 1.1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .medico-option input:checked+.medico-label .medico-check {
+            opacity: 1;
+        }
+
+        /* ── Form controls ── */
+        .form-control-custom {
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-control-custom:focus {
+            border-color: #c58aa0;
+            box-shadow: 0 0 0 3px rgba(197, 138, 160, 0.15);
+            outline: none;
+        }
+
+        textarea.form-control-custom {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        /* ── Botón principal ── */
+        .btn-booking {
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: opacity 0.2s, transform 0.1s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-booking:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .btn-booking:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── Alerta error ── */
+        .alert-form-error {
+            background: #fff0f3;
+            border: 1px solid #f5c2cc;
+            color: #c0392b;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        /* ── Features section ── */
+        .consultation-features {
+            background: linear-gradient(135deg, #fdf6f8, #f3eaed);
+            border-radius: 16px;
+            padding: 44px 40px;
+            margin-top: 40px;
+        }
+
+        .feature-icon {
+            font-size: 2.2rem;
+            color: #c58aa0;
+            margin-bottom: 16px;
+        }
+
+        /* ── CTA ── */
+        .consultation-cta {
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            padding: 60px 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* ── Estado cargando ── */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fa-spin {
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* ── Success state ── */
+        .success-state {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .success-icon-wrap {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-icon-wrap i {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .success-state h3 {
+            font-family: 'Playfair Display', serif;
+            color: #2b2b2b;
+            margin-bottom: 10px;
+        }
+
+        .success-state p {
+            color: #888;
+            margin-bottom: 28px;
+        }
+
+        /* ── Label de sección dinámica ── */
+        .section-hint {
+            font-size: 0.82rem;
+            color: #c58aa0;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ── Fecha mín label ── */
+        .date-hint {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 
 <body>
@@ -35,249 +462,342 @@
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Grace Glow</a>
+            <a class="navbar-brand" href="index.html">Eje Salud</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#services">Especialidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mis-citas.html" id="nav-mis-citas"
+                            style="display:none;">Mis Citas</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="consultation.html">Agendar Cita</a></li>
+                    <!-- Sin sesión -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-login">
+                        <a class="btn btn-consultation" href="login.html">Iniciar Sesión</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#services">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#gallery">Gallery</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#contact">Contact</a>
-                    </li>
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-                        <a class="btn btn-consultation" href="index.html#contact">Book Consultation</a>
+                    <!-- Con sesión -->
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-usuario"
+                        style="display:none; align-items:center; gap:12px;">
+                        <span style="color:#a36a7b; font-weight:600;">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="nav-nombre"></span>
+                        </span>
+                        <a class="btn btn-outline-danger btn-sm" href="#" id="nav-logout">Salir</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Consultation Hero -->
+    <!-- Hero -->
     <section class="consultation-hero" id="home">
         <div class="container">
             <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
-                <h1>Your Journey to Confidence Begins Here</h1>
-                <p class="hero-subtitle">Schedule a personalized consultation with our board-certified specialists to discuss your aesthetic goals and discover customized treatment options.</p>
+                <h1>Tu salud comienza aquí</h1>
+                <p class="hero-subtitle">Agenda tu cita con nuestros especialistas médicos de forma rápida y sencilla.
+                    Atención personalizada para ti y tu familia.</p>
                 <div>
-                    <a href="#consultation-form" class="btn btn-hero btn-primary-hero">Book Now</a>
-                    <a href="tel:3105551234" class="btn btn-hero btn-outline-hero"><i class="fas fa-phone me-2"></i> Call (310) 555-1234</a>
+                    <a href="#consultation-form" class="btn btn-hero btn-primary-hero">Agendar Ahora</a>
+                    <a href="tel:5512345678" class="btn btn-hero btn-outline-hero">
+                        <i class="fas fa-phone me-2"></i>55 1234 5678
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Consultation Steps -->
+    <!-- Pasos -->
     <section class="section-padding">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-12 text-center">
-                    <h2 class="section-title" data-aos="fade-up">Simple 4-Step Process</h2>
-                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Your path to transformation is straightforward and transparent.</p>
+                    <h2 class="section-title" data-aos="fade-up">Proceso Simple en 4 Pasos</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Agenda tu cita en minutos desde
+                        cualquier dispositivo.</p>
                 </div>
             </div>
 
             <div class="consultation-steps" data-aos="fade-up">
-                <!-- Step 1 -->
                 <div class="step-item">
                     <div class="step-number">1</div>
                     <div>
-                        <h4>Initial Consultation</h4>
-                        <p>Meet with our specialists to discuss your goals, medical history, and treatment options.</p>
+                        <h4>Elige tu especialidad</h4>
+                        <p>Selecciona el área médica que necesitas: Médico General, Medicina Interna, Psicología,
+                            Podología o Radiología.</p>
                     </div>
                 </div>
-
-                <!-- Step 2 -->
                 <div class="step-item">
                     <div class="step-number">2</div>
                     <div>
-                        <h4>Personalized Treatment Plan</h4>
-                        <p>Receive a customized plan outlining procedures, timeline, and investment.</p>
+                        <h4>Selecciona tu médico</h4>
+                        <p>Elige entre los profesionales disponibles para tu especialidad.</p>
                     </div>
                 </div>
-
-                <!-- Step 3 -->
                 <div class="step-item">
                     <div class="step-number">3</div>
                     <div>
-                        <h4>Treatment Day</h4>
-                        <p>Experience your procedure in our state-of-the-art facility with expert care.</p>
+                        <h4>Fecha y hora</h4>
+                        <p>Consulta la disponibilidad en tiempo real y reserva el horario que más te convenga.</p>
                     </div>
                 </div>
-
-                <!-- Step 4 -->
                 <div class="step-item">
                     <div class="step-number">4</div>
                     <div>
-                        <h4>Aftercare & Follow-up</h4>
-                        <p>Comprehensive post-treatment care and follow-up appointments to ensure optimal results.</p>
+                        <h4>Confirma tu cita</h4>
+                        <p>Agrega el motivo de tu consulta y confirma. Recibirás seguimiento desde tu cuenta.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Consultation Form -->
+    <!-- Formulario principal -->
     <section class="section-padding" id="consultation-form">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-12 text-center">
-                    <h2 class="section-title" data-aos="fade-up">Book Your Consultation</h2>
-                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Complete the form below and we'll contact you within 24 hours to confirm your appointment.</p>
+                    <h2 class="section-title" data-aos="fade-up">Agendar mi Cita</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Completa los datos a continuación para
+                        reservar tu consulta médica.</p>
                 </div>
             </div>
 
-            <div class="consultation-form-card" data-aos="fade-up">
-                <form id="consultationForm">
-                    <!-- Personal Information -->
-                    <h4 class="form-section-title">Personal Information</h4>
-                    <div class="row mb-4">
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control form-control-custom" placeholder="First Name" required>
+            <div class="row">
+                <!-- Formulario (col izquierda) -->
+                <div class="col-lg-8 mb-5 mb-lg-0">
+                    <div class="consultation-form-card" data-aos="fade-up">
+
+                        <!-- Alerta de error -->
+                        <div class="alert-form-error" id="alert-error">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span id="alert-error-text"></span>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control form-control-custom" placeholder="Last Name" required>
+
+                        <!-- ── FORMULARIO ACTIVO ── -->
+                        <div id="form-body">
+
+                            <!-- PASO 1: Especialidad -->
+                            <h4 class="form-section-title">
+                                <i class="fas fa-stethoscope me-2"></i>Especialidad médica
+                            </h4>
+                            <p class="section-hint">Selecciona el área de atención que necesitas</p>
+                            <div class="treatment-options" id="especialidad-grid">
+                                <!-- generado dinámicamente -->
+                            </div>
+
+                            <!-- PASO 2: Médico (aparece al seleccionar especialidad) -->
+                            <div id="medico-section" style="display:none;">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-user-md me-2"></i>Médico
+                                </h4>
+                                <span class="section-hint" id="medico-hint">Profesionales disponibles</span>
+                                <div id="medicos-loading" class="slots-loading" style="display:none;">
+                                    <i class="fas fa-circle-notch fa-spin me-2"></i>Cargando médicos...
+                                </div>
+                                <div class="medico-options" id="medico-options"></div>
+                            </div>
+
+                            <!-- PASO 3: Fecha y hora (aparece al seleccionar médico) -->
+                            <div id="fecha-section" style="display:none;">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-calendar-alt me-2"></i>Fecha y hora
+                                </h4>
+                                <div class="mb-4">
+                                    <label class="section-hint mb-1" for="input-fecha">Selecciona una fecha</label>
+                                    <input type="date" class="form-control form-control-custom" id="input-fecha">
+                                    <p class="date-hint">Atención de lunes a viernes, 8:00 am – 6:00 pm</p>
+                                </div>
+                                <div id="slots-section" style="display:none;">
+                                    <label class="section-hint mb-1">Horario disponible</label>
+                                    <div id="slots-loading" class="slots-loading" style="display:none;">
+                                        <i class="fas fa-circle-notch fa-spin me-2"></i>Consultando disponibilidad...
+                                    </div>
+                                    <div id="slots-empty" class="slots-empty" style="display:none;">
+                                        <i class="fas fa-calendar-times me-2"></i>No hay horarios disponibles para esta
+                                        fecha.
+                                    </div>
+                                    <div class="availability-slots" id="slots-grid"></div>
+                                </div>
+                            </div>
+
+                            <!-- PASO 4: Motivo (aparece al seleccionar hora) -->
+                            <div id="motivo-section" style="display:none;">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-clipboard me-2"></i>Motivo de consulta
+                                </h4>
+                                <span class="section-hint">Describe brevemente el motivo de tu visita</span>
+                                <textarea class="form-control form-control-custom" id="input-motivo"
+                                    placeholder="Ej: Dolor de cabeza frecuente, revisión general, seguimiento de tratamiento..."></textarea>
+                            </div>
+
+                            <!-- Botón confirmar (aparece al completar todos los pasos) -->
+                            <div id="submit-section" class="mt-4" style="display:none;">
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <button class="btn-booking" id="btn-confirmar">
+                                        <span id="btn-text"><i class="fas fa-calendar-check me-2"></i>Confirmar
+                                            Cita</span>
+                                        <span id="btn-spinner" style="display:none;">
+                                            <i class="fas fa-circle-notch fa-spin me-2"></i>Agendando...
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-link text-muted p-0" id="btn-reset"
+                                        style="font-size:0.88rem;">
+                                        <i class="fas fa-redo me-1"></i>Empezar de nuevo
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div><!-- /form-body -->
+
+                        <!-- ── ESTADO DE ÉXITO ── -->
+                        <div id="success-body" style="display:none;">
+                            <div class="success-state">
+                                <div class="success-icon-wrap">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <h3>¡Cita agendada exitosamente!</h3>
+                                <p>Tu cita ha sido registrada. Puedes consultarla y gestionarla desde "Mis Citas".</p>
+                                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                    <a href="mis-citas.html" class="btn-booking text-decoration-none d-inline-block">
+                                        <i class="fas fa-calendar me-2"></i>Ver mis citas
+                                    </a>
+                                    <button class="btn btn-outline-secondary" id="btn-otra-cita">
+                                        <i class="fas fa-plus me-2"></i>Agendar otra cita
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="email" class="form-control form-control-custom" placeholder="Email Address" required>
+
+                    </div><!-- /card -->
+                </div>
+
+                <!-- Info lateral -->
+                <div class="col-lg-4" data-aos="fade-left">
+                    <!-- Resumen de selección -->
+                    <div class="contact-info mb-4"
+                        style="background:#fff; border-radius:14px; padding:28px; box-shadow:0 6px 24px rgba(163,106,123,0.08);">
+                        <h5
+                            style="font-family:'Playfair Display',serif; color:#2b2b2b; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid #f0e4e8;">
+                            <i class="fas fa-list-check me-2" style="color:#c58aa0;"></i>Tu selección
+                        </h5>
+                        <div id="resumen-especialidad" class="contact-item" style="display:none;">
+                            <div class="contact-icon"><i class="fas fa-stethoscope"></i></div>
+                            <div>
+                                <h5>Especialidad</h5>
+                                <p id="res-esp-text">—</p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="tel" class="form-control form-control-custom" placeholder="Phone Number" required>
+                        <div id="resumen-medico" class="contact-item" style="display:none;">
+                            <div class="contact-icon"><i class="fas fa-user-md"></i></div>
+                            <div>
+                                <h5>Médico</h5>
+                                <p id="res-med-text">—</p>
+                            </div>
                         </div>
-                        <div class="col-12 mb-3">
-                            <input type="date" class="form-control form-control-custom" placeholder="Date of Birth">
+                        <div id="resumen-fecha" class="contact-item" style="display:none;">
+                            <div class="contact-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div>
+                                <h5>Fecha</h5>
+                                <p id="res-fecha-text">—</p>
+                            </div>
+                        </div>
+                        <div id="resumen-hora" class="contact-item" style="display:none;">
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <h5>Hora</h5>
+                                <p id="res-hora-text">—</p>
+                            </div>
+                        </div>
+                        <div id="resumen-vacio"
+                            style="color:#bbb; font-size:0.88rem; text-align:center; padding:12px 0;">
+                            <i class="fas fa-info-circle me-1"></i>Completa el formulario para ver tu resumen
                         </div>
                     </div>
 
-                    <!-- Treatment Interest -->
-                    <h4 class="form-section-title">Treatment Interest</h4>
-                    <div class="treatment-options mb-4">
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment1" name="treatment" value="Plastic Surgery">
-                            <label for="treatment1" class="treatment-label">Plastic Surgery</label>
+                    <!-- Info de horarios -->
+                    <div
+                        style="background:#fff; border-radius:14px; padding:28px; box-shadow:0 6px 24px rgba(163,106,123,0.08);">
+                        <h5
+                            style="font-family:'Playfair Display',serif; color:#2b2b2b; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid #f0e4e8;">
+                            <i class="fas fa-clock me-2" style="color:#c58aa0;"></i>Horarios
+                        </h5>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-sun"></i></div>
+                            <div>
+                                <h5>Lun – Vie</h5>
+                                <p>8:00 am – 6:00 pm</p>
+                            </div>
                         </div>
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment2" name="treatment" value="Botox & Fillers">
-                            <label for="treatment2" class="treatment-label">Botox & Fillers</label>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div>
+                                <h5>Citas cada</h5>
+                                <p>30 minutos</p>
+                            </div>
                         </div>
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment3" name="treatment" value="Laser Treatments">
-                            <label for="treatment3" class="treatment-label">Laser Treatments</label>
-                        </div>
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment4" name="treatment" value="Medical Spa">
-                            <label for="treatment4" class="treatment-label">Medical Spa</label>
-                        </div>
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment5" name="treatment" value="Dermatology">
-                            <label for="treatment5" class="treatment-label">Dermatology</label>
-                        </div>
-                        <div class="treatment-option">
-                            <input type="checkbox" id="treatment6" name="treatment" value="Not Sure">
-                            <label for="treatment6" class="treatment-label">Not Sure</label>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div>
+                                <h5>Teléfono</h5>
+                                <p>55 1234 5678</p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Preferred Date & Time -->
-                    <h4 class="form-section-title">Preferred Appointment</h4>
-                    <div class="row mb-4">
-                        <div class="col-md-6 mb-3">
-                            <input type="date" class="form-control form-control-custom" min="2026-01-01">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <select class="form-control form-control-custom">
-                                <option value="">Preferred Time</option>
-                                <option>Morning (9AM-12PM)</option>
-                                <option>Afternoon (1PM-4PM)</option>
-                                <option>Evening (5PM-7PM)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Additional Information -->
-                    <h4 class="form-section-title">Additional Information</h4>
-                    <div class="mb-4">
-                        <textarea class="form-control form-control-custom" rows="5" placeholder="Please describe your aesthetic goals, concerns, or any medical conditions we should be aware of..."></textarea>
-                    </div>
-
-                    <!-- How Did You Hear About Us -->
-                    <div class="mb-4">
-                        <select class="form-control form-control-custom">
-                            <option value="">How did you hear about us?</option>
-                            <option>Google Search</option>
-                            <option>Instagram/Facebook</option>
-                            <option>Friend/Family Referral</option>
-                            <option>Online Review</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-consultation btn-lg w-100">
-                            <i class="fas fa-calendar-check me-2"></i> Submit Consultation Request
-                        </button>
-                        <p class="text-muted mt-3"><small>By submitting this form, you agree to our Privacy Policy and consent to be contacted by Grace Glow.</small></p>
-                    </div>
-                </form>
-            </div>
+            </div><!-- /row -->
         </div>
     </section>
 
-    <!-- Consultation Features -->
+    <!-- Features -->
     <section class="section-padding">
         <div class="container">
             <div class="consultation-features" data-aos="fade-up">
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <h3 style="font-family:'Playfair Display',serif; color:#2b2b2b;">¿Por qué elegir Eje Salud?</h3>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-md"></i>
-                        </div>
-                        <h4>Expert Consultation</h4>
-                        <p>45-minute private session with a board-certified specialist.</p>
+                    <div class="col-md-4 text-center mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+                        <h4>Médicos Certificados</h4>
+                        <p>Todo nuestro equipo cuenta con cédula profesional y certificaciones vigentes.</p>
                     </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-file-medical"></i>
-                        </div>
-                        <h4>No Obligation</h4>
-                        <p>Our consultation is informative with no pressure to proceed.</p>
+                    <div class="col-md-4 text-center mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h4>Disponibilidad en Tiempo Real</h4>
+                        <p>Consulta los horarios disponibles al instante y reserva sin esperas.</p>
                     </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <h4>Transparent Pricing</h4>
-                        <p>Detailed cost breakdown with financing options available.</p>
+                    <div class="col-md-4 text-center mb-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h4>Tu Información Segura</h4>
+                        <p>Tus datos médicos y personales están protegidos en todo momento.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Consultation CTA -->
+    <!-- CTA -->
     <section class="section-padding">
         <div class="container">
             <div class="consultation-cta" data-aos="zoom-in">
-                <h2>Have Questions Before Booking?</h2>
-                <p class="mb-4">Our patient coordinators are available to answer any questions you may have.</p>
+                <h2>¿Tienes dudas antes de agendar?</h2>
+                <p class="mb-4">Nuestro equipo está listo para ayudarte a encontrar la atención que necesitas.</p>
                 <div>
-                    <a href="tel:3105551234" class="btn btn-hero btn-primary-hero me-3"><i class="fas fa-phone me-2"></i> Call Now</a>
-                    <a href="mailto:info@eclataesthetics.com" class="btn btn-hero btn-outline-hero"><i class="fas fa-envelope me-2"></i> Email Us</a>
+                    <a href="tel:5512345678" class="btn btn-hero btn-primary-hero me-3"
+                        style="background:#fff; color:#a36a7b; border-color:#fff;">
+                        <i class="fas fa-phone me-2"></i>Llamar ahora
+                    </a>
+                    <a href="mailto:contacto@ejesalud.mx" class="btn btn-hero btn-outline-hero">
+                        <i class="fas fa-envelope me-2"></i>Enviar correo
+                    </a>
                 </div>
             </div>
         </div>
@@ -288,129 +808,375 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
-                    <a href="#" class="footer-brand">Grace Glow</a>
-                    <p>Providing exceptional cosmetic medicine with a focus on safety, natural results, and patient
-                        satisfaction since 2008.</p>
+                    <a href="index.html" class="footer-brand">Eje Salud</a>
+                    <p>Atención médica de calidad con un enfoque humano y profesional.</p>
                     <div class="social-icons">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                width="16" height="16" fill="currentColor" aria-label="X">
-                                <path
-                                    d="M18.244 2.25h3.308l-7.227 8.26 8.504 11.24h-6.65l-5.21-6.81-5.956 6.81H1.704l7.73-8.84L1.25 2.25h6.82l4.71 6.23 5.464-6.23zm-1.16 17.52h1.833L7.08 4.126H5.11L17.084 19.77z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
-                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <h5 class="text-white mb-3">Navegación</h5>
                     <ul class="footer-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="index.html#about">About Us</a></li>
-                        <li><a href="index.html#services">Services</a></li>
-                        <li><a href="index.html#gallery">Gallery</a></li>
-                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="index.html#about">Nosotros</a></li>
+                        <li><a href="index.html#services">Especialidades</a></li>
+                        <li><a href="mis-citas.html">Mis Citas</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-                    <h5 class="text-white mb-3">Our Services</h5>
+                    <h5 class="text-white mb-3">Especialidades</h5>
                     <ul class="footer-links">
-                        <li><a href="surgery.html">Plastic Surgery</a></li>
-                        <li><a href="cosmetic-procedures.html">Cosmetic Procedures</a></li>
-                        <li><a href="dermatology.html">Dermatology</a></li>
-                        <li><a href="medical-spa.html">Medical Spa</a></li>
-                        <li><a href="consultation.html">Consultation</a></li>
+                        <li><a href="consultation.html">Médico General</a></li>
+                        <li><a href="consultation.html">Medicina Interna</a></li>
+                        <li><a href="consultation.html">Psicología</a></li>
+                        <li><a href="consultation.html">Podología</a></li>
+                        <li><a href="consultation.html">Radiología</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4">
-                    <h5 class="text-white mb-3">Contact Info</h5>
+                    <h5 class="text-white mb-3">Mi Cuenta</h5>
                     <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Aesthetic Avenue, Suite 5
-Beverly Hills, CA 90210</li>
-                        <li><i class="fas fa-phone-alt me-2"></i> (310) 555-1234</li>
-                        <li><i class="fas fa-envelope me-2"></i> info@eclataesthetics.com</li>
+                        <li><a href="login.html">Iniciar Sesión</a></li>
+                        <li><a href="registro.html">Registrarse</a></li>
+                        <li><a href="mis-citas.html">Mis Citas</a></li>
+                        <li><a href="consultation.html">Agendar Cita</a></li>
                     </ul>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="copyright">
-                        <p>&copy; 2026 Grace Glow. All rights reserved. | <a href="privacy-policy.html">Privacy
-                                Policy</a> | <a href="terms-of-service.html">Terms of Service</a>| <a href="faq.html">FAQs</a></p>
+                        <p>&copy; 2026 Eje Salud. Todos los derechos reservados.</p>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
-    <div class="scroll-top">
-        <i class="fas fa-chevron-up"></i>
-    </div>
+    <div class="scroll-top"><i class="fas fa-chevron-up"></i></div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
-
-    <!-- AOS (Animate on Scroll) -->
     <script src="assets/js/aos.js"></script>
-
-    <!-- Custom JavaScript -->
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/api.js"></script>
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            offset: 100,
-        });
+        // ── Proteger ruta ──────────────────────────────────────────────
+        UI.requireAuth();
 
-        // Form Submission
-        document.getElementById('consultationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show confirmation message (in a real app, this would be an AJAX call)
-            alert('Thank you! Your consultation request has been submitted. We will contact you within 24 hours.');
-            
-            // Reset form
-            this.reset();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        // ── Estado ────────────────────────────────────────────────────
+        const state = {
+            especialidad: null,
+            medicoId: null,
+            medicoNombre: null,
+            fecha: null,
+            hora: null,
+        };
 
-        // Slot selection
-        document.querySelectorAll('.slot').forEach(slot => {
-            slot.addEventListener('click', function() {
-                document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
+        // ── Especialidades ─────────────────────────────────────────────
+        const ESPECIALIDADES = [
+            { nombre: 'Médico General', icon: 'fa-stethoscope' },
+            { nombre: 'Medicina Interna', icon: 'fa-heartbeat' },
+            { nombre: 'Psicología', icon: 'fa-brain' },
+            { nombre: 'Podología', icon: 'fa-shoe-prints' },
+            { nombre: 'Radiología', icon: 'fa-x-ray' },
+        ];
+
+        // ── Helpers ────────────────────────────────────────────────────
+        function showError(msg) {
+            const el = document.getElementById('alert-error');
+            document.getElementById('alert-error-text').textContent = msg;
+            el.style.display = 'block';
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideError() {
+            document.getElementById('alert-error').style.display = 'none';
+        }
+
+        function showSection(id) { document.getElementById(id).style.display = 'block'; }
+        function hideSection(id) { document.getElementById(id).style.display = 'none'; }
+
+        function updateResumenItem(sectionId, textId, val) {
+            if (val) {
+                document.getElementById(textId).textContent = val;
+                document.getElementById(sectionId).style.display = 'flex';
+                document.getElementById('resumen-vacio').style.display = 'none';
+            } else {
+                document.getElementById(sectionId).style.display = 'none';
+            }
+        }
+
+        function formatFecha(iso) {
+            return new Date(iso + 'T00:00:00').toLocaleDateString('es-MX', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
-        });
+        }
 
-        // Treatment option selection
-        document.querySelectorAll('.treatment-option input').forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'Not Sure') {
-                    // Uncheck all others if "Not Sure" is selected
-                    document.querySelectorAll('.treatment-option input').forEach(i => {
-                        if (i !== this) i.checked = false;
-                    });
-                } else {
-                    // Uncheck "Not Sure" if another option is selected
-                    document.querySelectorAll('.treatment-option input').forEach(i => {
-                        if (i.value === 'Not Sure') i.checked = false;
-                    });
+        // ── Render especialidades ──────────────────────────────────────
+        function renderEspecialidades() {
+            const grid = document.getElementById('especialidad-grid');
+            grid.innerHTML = ESPECIALIDADES.map(e => `
+                <div class="treatment-option">
+                    <input type="radio" name="especialidad" id="esp-${e.nombre}" value="${e.nombre}">
+                    <label for="esp-${e.nombre}" class="treatment-label">
+                        <i class="fas ${e.icon} esp-icon"></i>
+                        ${e.nombre}
+                    </label>
+                </div>
+            `).join('');
+
+            grid.querySelectorAll('input[name="especialidad"]').forEach(radio => {
+                radio.addEventListener('change', onEspecialidadChange);
+            });
+        }
+
+        // ── Al elegir especialidad ──────────────────────────────────────
+        async function onEspecialidadChange(e) {
+            hideError();
+            state.especialidad = e.target.value;
+            state.medicoId = null;
+            state.medicoNombre = null;
+            state.fecha = null;
+            state.hora = null;
+
+            // Resetear selecciones siguientes
+            document.getElementById('input-fecha').value = '';
+            document.getElementById('slots-grid').innerHTML = '';
+            document.getElementById('input-motivo').value = '';
+            hideSection('slots-section');
+            hideSection('fecha-section');
+            hideSection('motivo-section');
+            hideSection('submit-section');
+
+            updateResumenItem('resumen-especialidad', 'res-esp-text', state.especialidad);
+            updateResumenItem('resumen-medico', 'res-med-text', null);
+            updateResumenItem('resumen-fecha', 'res-fecha-text', null);
+            updateResumenItem('resumen-hora', 'res-hora-text', null);
+
+            // Cargar médicos
+            showSection('medico-section');
+            document.getElementById('medico-hint').textContent = `Médicos disponibles en ${state.especialidad}`;
+            const list = document.getElementById('medico-options');
+            list.innerHTML = '';
+            document.getElementById('medicos-loading').style.display = 'block';
+
+            try {
+                const data = await MedicosAPI.listar(state.especialidad);
+                document.getElementById('medicos-loading').style.display = 'none';
+                const medicos = (data.medicos || data).filter(m => m.activo !== false);
+
+                if (!medicos.length) {
+                    list.innerHTML = `<div class="slots-empty"><i class="fas fa-user-md me-2"></i>No hay médicos disponibles para esta especialidad.</div>`;
+                    return;
                 }
+
+                list.innerHTML = medicos.map(m => `
+                    <div class="medico-option">
+                        <input type="radio" name="medico" id="med-${m._id}" value="${m._id}" data-nombre="Dr. ${m.nombre} ${m.apellido}">
+                        <label for="med-${m._id}" class="medico-label">
+                            <div class="medico-avatar-sm"><i class="fas fa-user-md"></i></div>
+                            <div class="medico-label-info">
+                                <h6>Dr. ${m.nombre} ${m.apellido}</h6>
+                                <p>${m.especialidad}${m.cedula ? ' · Ced. ' + m.cedula : ''}</p>
+                            </div>
+                            <i class="fas fa-check-circle medico-check"></i>
+                        </label>
+                    </div>
+                `).join('');
+
+                list.querySelectorAll('input[name="medico"]').forEach(radio => {
+                    radio.addEventListener('change', onMedicoChange);
+                });
+
+            } catch (err) {
+                document.getElementById('medicos-loading').style.display = 'none';
+                list.innerHTML = `<div class="slots-empty" style="color:#e74c3c;"><i class="fas fa-exclamation-circle me-2"></i>${err.message}</div>`;
+            }
+        }
+
+        // ── Al elegir médico ───────────────────────────────────────────
+        function onMedicoChange(e) {
+            hideError();
+            state.medicoId = e.target.value;
+            state.medicoNombre = e.target.dataset.nombre;
+            state.fecha = null;
+            state.hora = null;
+
+            document.getElementById('input-fecha').value = '';
+            document.getElementById('slots-grid').innerHTML = '';
+            hideSection('slots-section');
+            hideSection('motivo-section');
+            hideSection('submit-section');
+
+            updateResumenItem('resumen-medico', 'res-med-text', state.medicoNombre);
+            updateResumenItem('resumen-fecha', 'res-fecha-text', null);
+            updateResumenItem('resumen-hora', 'res-hora-text', null);
+
+            showSection('fecha-section');
+            // Scroll suave
+            document.getElementById('fecha-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ── Al cambiar fecha ───────────────────────────────────────────
+        const inputFecha = document.getElementById('input-fecha');
+        const today = new Date().toISOString().split('T')[0];
+        inputFecha.min = today;
+
+        inputFecha.addEventListener('change', async function () {
+            hideError();
+            state.fecha = this.value;
+            state.hora = null;
+
+            document.getElementById('slots-grid').innerHTML = '';
+            hideSection('motivo-section');
+            hideSection('submit-section');
+            updateResumenItem('resumen-fecha', 'res-fecha-text', null);
+            updateResumenItem('resumen-hora', 'res-hora-text', null);
+
+            if (!state.fecha) return;
+
+            // Bloquear domingos
+            const dia = new Date(state.fecha + 'T00:00:00').getDay();
+            if (dia === 0) {
+                showSection('slots-section');
+                document.getElementById('slots-empty').style.display = 'block';
+                document.getElementById('slots-empty').innerHTML = '<i class="fas fa-ban me-2"></i>No hay atención los domingos.';
+                document.getElementById('slots-loading').style.display = 'none';
+                document.getElementById('slots-grid').innerHTML = '';
+                return;
+            }
+
+            // Cargar slots
+            showSection('slots-section');
+            document.getElementById('slots-loading').style.display = 'block';
+            document.getElementById('slots-empty').style.display = 'none';
+
+            try {
+                const data = await CitasAPI.disponibilidad(state.medicoId, state.fecha);
+                document.getElementById('slots-loading').style.display = 'none';
+
+                const slots = data.horasDisponibles || data.disponibles || data;
+
+                if (!slots || !slots.length) {
+                    document.getElementById('slots-empty').style.display = 'block';
+                    return;
+                }
+
+                updateResumenItem('resumen-fecha', 'res-fecha-text', formatFecha(state.fecha));
+
+                const grid = document.getElementById('slots-grid');
+                grid.innerHTML = slots.map(s => {
+                    const disponible = s.disponible !== false;
+                    return `<div class="slot${disponible ? '' : ' occupied'}"
+                        data-hora="${s.hora || s}"
+                        ${disponible ? '' : 'style="pointer-events:none"'}>${s.hora || s}</div>`;
+                }).join('');
+
+                grid.querySelectorAll('.slot:not(.occupied)').forEach(slot => {
+                    slot.addEventListener('click', onSlotClick);
+                });
+
+            } catch (err) {
+                document.getElementById('slots-loading').style.display = 'none';
+                document.getElementById('slots-empty').style.display = 'block';
+                document.getElementById('slots-empty').innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${err.message}`;
+            }
+        });
+
+        // ── Al elegir hora ─────────────────────────────────────────────
+        function onSlotClick(e) {
+            hideError();
+            document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+            e.currentTarget.classList.add('selected');
+            state.hora = e.currentTarget.dataset.hora;
+
+            updateResumenItem('resumen-hora', 'res-hora-text', state.hora + ' hrs');
+
+            showSection('motivo-section');
+            showSection('submit-section');
+            document.getElementById('motivo-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ── Confirmar cita ─────────────────────────────────────────────
+        document.getElementById('btn-confirmar').addEventListener('click', async () => {
+            hideError();
+            const motivo = document.getElementById('input-motivo').value.trim();
+
+            if (!state.especialidad) { showError('Por favor selecciona una especialidad.'); return; }
+            if (!state.medicoId) { showError('Por favor selecciona un médico.'); return; }
+            if (!state.fecha) { showError('Por favor selecciona una fecha.'); return; }
+            if (!state.hora) { showError('Por favor selecciona un horario.'); return; }
+            if (!motivo) { showError('Por favor describe el motivo de tu consulta.'); return; }
+
+            document.getElementById('btn-text').style.display = 'none';
+            document.getElementById('btn-spinner').style.display = 'inline';
+            document.getElementById('btn-confirmar').disabled = true;
+
+            try {
+                await CitasAPI.agendar({
+                    medico: state.medicoId,
+                    especialidad: state.especialidad,
+                    fecha: state.fecha,
+                    hora: state.hora,
+                    motivo,
+                });
+
+                document.getElementById('form-body').style.display = 'none';
+                document.getElementById('success-body').style.display = 'block';
+                document.getElementById('success-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (err) {
+                showError(err.message || 'Error al agendar la cita. Intenta de nuevo.');
+                document.getElementById('btn-text').style.display = 'inline';
+                document.getElementById('btn-spinner').style.display = 'none';
+                document.getElementById('btn-confirmar').disabled = false;
+            }
+        });
+
+        // ── Reset completo ─────────────────────────────────────────────
+        function resetForm() {
+            state.especialidad = null;
+            state.medicoId = null;
+            state.medicoNombre = null;
+            state.fecha = null;
+            state.hora = null;
+
+            // Radio buttons
+            document.querySelectorAll('input[name="especialidad"], input[name="medico"]').forEach(r => r.checked = false);
+            document.getElementById('input-fecha').value = '';
+            document.getElementById('input-motivo').value = '';
+            document.getElementById('slots-grid').innerHTML = '';
+
+            hideSection('medico-section');
+            hideSection('fecha-section');
+            hideSection('slots-section');
+            hideSection('motivo-section');
+            hideSection('submit-section');
+
+            // Resumen
+            ['resumen-especialidad', 'resumen-medico', 'resumen-fecha', 'resumen-hora'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
             });
-        });
+            document.getElementById('resumen-vacio').style.display = 'block';
 
-        // Preloader
-        window.addEventListener('load', function() {
-            document.getElementById('preloader').style.display = 'none';
-        });
+            hideError();
 
-        // Scroll to top
-        document.querySelector('.scroll-top').addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+            document.getElementById('form-body').style.display = 'block';
+            document.getElementById('success-body').style.display = 'none';
+            document.getElementById('btn-text').style.display = 'inline';
+            document.getElementById('btn-spinner').style.display = 'none';
+            document.getElementById('btn-confirmar').disabled = false;
+
+            document.getElementById('consultation-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.getElementById('btn-reset').addEventListener('click', resetForm);
+        document.getElementById('btn-otra-cita').addEventListener('click', resetForm);
+
+        // ── Inicializar ────────────────────────────────────────────────
+        renderEspecialidades();
     </script>
 </body>
 
