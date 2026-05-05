@@ -1,31 +1,110 @@
-# 🏥 Eje Salud — Backend API
+# 🏥 Eje Salud — Sistema de Citas Médicas
 
-Backend REST con Node.js + Express + MongoDB para la clínica Eje Salud.
-
----
-
-## Requisitos
-- Node.js 18+
-- MongoDB local o Atlas
+Sistema completo de gestión de citas para el **Hospital Eje Central**.  
+**Backend:** Node.js + Express + MongoDB + JWT  
+**Frontend:** HTML/CSS/JS puro + Bootstrap 5 (rama `frontend-ejsalud`)
 
 ---
 
-## Instalación
+## 🗂 Ramas del repositorio
+
+| Rama | Contenido |
+|------|-----------|
+| `main` | Backend (Node.js + Express + MongoDB) |
+| `frontend-ejsalud` | Frontend (HTML/CSS/JS) |
+
+---
+
+## ⚙️ Requisitos previos
+
+- [Node.js](https://nodejs.org/) v18 o superior
+- [MongoDB Community](https://www.mongodb.com/try/download/community) corriendo en `localhost:27017`
+- npm v9 o superior
+
+---
+
+## 🚀 Instalación completa (Backend + Frontend)
+
+### Paso 1 — Clonar el repositorio
 
 ```bash
-# 1. Instalar dependencias
+git clone https://github.com/AkJoss/Eje_Salud.git
+cd Eje_Salud
+```
+
+### Paso 2 — Configurar el backend
+
+```bash
+# Instalar dependencias
 npm install
 
-# 2. Crear archivo de variables de entorno
+# Copiar variables de entorno
 cp .env.example .env
-# Edita .env con tu URI de MongoDB y un JWT_SECRET seguro
-
-# 3. Iniciar en desarrollo
-npm run dev
-
-# 4. Iniciar en producción
-npm start
 ```
+
+Editar el `.env`:
+
+```env
+PORT=3001
+MONGODB_URI=mongodb://localhost:27017/eje-salud
+JWT_SECRET=pon_aqui_una_clave_secreta_larga
+JWT_EXPIRES_IN=7d
+NODE_ENV=development
+```
+
+### Paso 3 — Poblar médicos de prueba (solo la primera vez)
+
+```bash
+node src/seedMedicos.js
+```
+
+Inserta 5 médicos con distintas especialidades en la base de datos.
+
+### Paso 4 — Iniciar el servidor backend
+
+```bash
+# Modo desarrollo (con nodemon)
+npm run dev
+```
+
+El backend queda en: `http://localhost:3001`
+
+### Paso 5 — Levantar el frontend
+
+```bash
+# Cambiar a la rama del frontend
+git checkout frontend-ejsalud
+
+# Levantar servidor estático en la carpeta del proyecto
+python3 -m http.server 5500
+# o con Node.js:
+npx serve . -p 5500
+```
+
+Abrir en el navegador: `http://localhost:5500`
+
+> ⚠️ **Importante:** El backend debe estar corriendo **antes** de usar el frontend.
+
+---
+
+## 🧪 Flujo de prueba
+
+1. Abre `http://localhost:5500/registro.html` → Crea una cuenta de paciente
+2. Ve a `http://localhost:5500/login.html` → Inicia sesión
+3. En el dashboard → Haz clic en **Agendar Cita**
+4. Selecciona especialidad → médico → fecha → hora → Confirmar
+5. En **Mis Citas** puedes mover o cancelar la cita
+
+---
+
+## 📝 Notas para el equipo
+
+- **No subas tu `.env`** al repositorio (ya está en `.gitignore`)
+- El frontend está en la rama **`frontend-ejsalud`**
+- El backend está en la rama **`main`**
+- Para contribuir, crea una rama propia: `git checkout -b feature/tu-nombre`
+
+---
 
 ---
 

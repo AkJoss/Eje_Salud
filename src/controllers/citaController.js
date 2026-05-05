@@ -1,11 +1,19 @@
 const Cita = require('../models/Cita');
 const Medico = require('../models/Medico');
 
-// GET /api/citas  — admin ve todas; paciente ve las suyas
+// GET /api/citas  — admin ve todas; paciente ve las suyas; médico ve las suyas
 exports.listarCitas = async (req, res) => {
   try {
-    const filtro =
-      req.usuario.rol === 'admin' ? {} : { paciente: req.usuario._id };
+    let filtro = {};
+    if (req.usuario.rol === 'paciente') {
+      filtro = { paciente: req.usuario._id };
+    } else if (req.usuario.rol === 'medico') {
+      // Buscar el documento Medico vinculado por email
+      const medicoDoc = await Medico.findOne({ email: req.usuario.email });
+      if (!medicoDoc) return res.status(200).json({ ok: true, total: 0, citas: [] });
+      filtro = { medico: medicoDoc._id };
+    }
+    // admin → filtro = {} (ve todas)
 
     const citas = await Cita.find(filtro)
       .populate('paciente', 'nombre apellido email telefono')
