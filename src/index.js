@@ -2,12 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const connectDB = require('./config/database');
 
 // Rutas
-const authRoutes   = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 const medicoRoutes = require('./routes/medicos');
-const citaRoutes   = require('./routes/citas');
+const citaRoutes = require('./routes/citas');
 
 const app = express();
 
@@ -18,24 +19,16 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Rutas principales
-app.use('/api/auth',    authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/medicos', medicoRoutes);
-app.use('/api/citas',   citaRoutes);
+app.use('/api/citas', citaRoutes);
 
 // Ruta raíz — verificar que el servidor corre
 app.get('/', (req, res) => {
-  res.json({
-    ok: true,
-    mensaje: '🏥 Eje Salud API — Servidor activo',
-    version: '1.0.0',
-    endpoints: {
-      auth:    '/api/auth',
-      medicos: '/api/medicos',
-      citas:   '/api/citas',
-    },
-  });
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Manejo de rutas no encontradas

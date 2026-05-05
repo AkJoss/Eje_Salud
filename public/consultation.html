@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Consultation | Grace Glow</title>
+    <meta name="description"
+        content="Schedule a personalized cosmetic consultation with board-certified specialists at Grace Glow.">
+
+        <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
+    <!-- Bootstrap 5 CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- AOS (Animate on Scroll) -->
+    <link href="assets/css/aos.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Grace Glow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#gallery">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                        <a class="btn btn-consultation" href="index.html#contact">Book Consultation</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Consultation Hero -->
+    <section class="consultation-hero" id="home">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <h1>Your Journey to Confidence Begins Here</h1>
+                <p class="hero-subtitle">Schedule a personalized consultation with our board-certified specialists to discuss your aesthetic goals and discover customized treatment options.</p>
+                <div>
+                    <a href="#consultation-form" class="btn btn-hero btn-primary-hero">Book Now</a>
+                    <a href="tel:3105551234" class="btn btn-hero btn-outline-hero"><i class="fas fa-phone me-2"></i> Call (310) 555-1234</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Steps -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Simple 4-Step Process</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Your path to transformation is straightforward and transparent.</p>
+                </div>
+            </div>
+
+            <div class="consultation-steps" data-aos="fade-up">
+                <!-- Step 1 -->
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h4>Initial Consultation</h4>
+                        <p>Meet with our specialists to discuss your goals, medical history, and treatment options.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h4>Personalized Treatment Plan</h4>
+                        <p>Receive a customized plan outlining procedures, timeline, and investment.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h4>Treatment Day</h4>
+                        <p>Experience your procedure in our state-of-the-art facility with expert care.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h4>Aftercare & Follow-up</h4>
+                        <p>Comprehensive post-treatment care and follow-up appointments to ensure optimal results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Form -->
+    <section class="section-padding" id="consultation-form">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Book Your Consultation</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Complete the form below and we'll contact you within 24 hours to confirm your appointment.</p>
+                </div>
+            </div>
+
+            <div class="consultation-form-card" data-aos="fade-up">
+                <form id="consultationForm">
+                    <!-- Personal Information -->
+                    <h4 class="form-section-title">Personal Information</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control form-control-custom" placeholder="First Name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control form-control-custom" placeholder="Last Name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="email" class="form-control form-control-custom" placeholder="Email Address" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="tel" class="form-control form-control-custom" placeholder="Phone Number" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <input type="date" class="form-control form-control-custom" placeholder="Date of Birth">
+                        </div>
+                    </div>
+
+                    <!-- Treatment Interest -->
+                    <h4 class="form-section-title">Treatment Interest</h4>
+                    <div class="treatment-options mb-4">
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment1" name="treatment" value="Plastic Surgery">
+                            <label for="treatment1" class="treatment-label">Plastic Surgery</label>
+                        </div>
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment2" name="treatment" value="Botox & Fillers">
+                            <label for="treatment2" class="treatment-label">Botox & Fillers</label>
+                        </div>
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment3" name="treatment" value="Laser Treatments">
+                            <label for="treatment3" class="treatment-label">Laser Treatments</label>
+                        </div>
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment4" name="treatment" value="Medical Spa">
+                            <label for="treatment4" class="treatment-label">Medical Spa</label>
+                        </div>
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment5" name="treatment" value="Dermatology">
+                            <label for="treatment5" class="treatment-label">Dermatology</label>
+                        </div>
+                        <div class="treatment-option">
+                            <input type="checkbox" id="treatment6" name="treatment" value="Not Sure">
+                            <label for="treatment6" class="treatment-label">Not Sure</label>
+                        </div>
+                    </div>
+
+                    <!-- Preferred Date & Time -->
+                    <h4 class="form-section-title">Preferred Appointment</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <input type="date" class="form-control form-control-custom" min="2026-01-01">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <select class="form-control form-control-custom">
+                                <option value="">Preferred Time</option>
+                                <option>Morning (9AM-12PM)</option>
+                                <option>Afternoon (1PM-4PM)</option>
+                                <option>Evening (5PM-7PM)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <h4 class="form-section-title">Additional Information</h4>
+                    <div class="mb-4">
+                        <textarea class="form-control form-control-custom" rows="5" placeholder="Please describe your aesthetic goals, concerns, or any medical conditions we should be aware of..."></textarea>
+                    </div>
+
+                    <!-- How Did You Hear About Us -->
+                    <div class="mb-4">
+                        <select class="form-control form-control-custom">
+                            <option value="">How did you hear about us?</option>
+                            <option>Google Search</option>
+                            <option>Instagram/Facebook</option>
+                            <option>Friend/Family Referral</option>
+                            <option>Online Review</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-consultation btn-lg w-100">
+                            <i class="fas fa-calendar-check me-2"></i> Submit Consultation Request
+                        </button>
+                        <p class="text-muted mt-3"><small>By submitting this form, you agree to our Privacy Policy and consent to be contacted by Grace Glow.</small></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Features -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="consultation-features" data-aos="fade-up">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h4>Expert Consultation</h4>
+                        <p>45-minute private session with a board-certified specialist.</p>
+                    </div>
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h4>No Obligation</h4>
+                        <p>Our consultation is informative with no pressure to proceed.</p>
+                    </div>
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h4>Transparent Pricing</h4>
+                        <p>Detailed cost breakdown with financing options available.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation CTA -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="consultation-cta" data-aos="zoom-in">
+                <h2>Have Questions Before Booking?</h2>
+                <p class="mb-4">Our patient coordinators are available to answer any questions you may have.</p>
+                <div>
+                    <a href="tel:3105551234" class="btn btn-hero btn-primary-hero me-3"><i class="fas fa-phone me-2"></i> Call Now</a>
+                    <a href="mailto:info@eclataesthetics.com" class="btn btn-hero btn-outline-hero"><i class="fas fa-envelope me-2"></i> Email Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a href="#" class="footer-brand">Grace Glow</a>
+                    <p>Providing exceptional cosmetic medicine with a focus on safety, natural results, and patient
+                        satisfaction since 2008.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                width="16" height="16" fill="currentColor" aria-label="X">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.504 11.24h-6.65l-5.21-6.81-5.956 6.81H1.704l7.73-8.84L1.25 2.25h6.82l4.71 6.23 5.464-6.23zm-1.16 17.52h1.833L7.08 4.126H5.11L17.084 19.77z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#gallery">Gallery</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Our Services</h5>
+                    <ul class="footer-links">
+                        <li><a href="surgery.html">Plastic Surgery</a></li>
+                        <li><a href="cosmetic-procedures.html">Cosmetic Procedures</a></li>
+                        <li><a href="dermatology.html">Dermatology</a></li>
+                        <li><a href="medical-spa.html">Medical Spa</a></li>
+                        <li><a href="consultation.html">Consultation</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="text-white mb-3">Contact Info</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Aesthetic Avenue, Suite 5
+Beverly Hills, CA 90210</li>
+                        <li><i class="fas fa-phone-alt me-2"></i> (310) 555-1234</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@eclataesthetics.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright">
+                        <p>&copy; 2026 Grace Glow. All rights reserved. | <a href="privacy-policy.html">Privacy
+                                Policy</a> | <a href="terms-of-service.html">Terms of Service</a>| <a href="faq.html">FAQs</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AOS (Animate on Scroll) -->
+    <script src="assets/js/aos.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            offset: 100,
+        });
+
+        // Form Submission
+        document.getElementById('consultationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show confirmation message (in a real app, this would be an AJAX call)
+            alert('Thank you! Your consultation request has been submitted. We will contact you within 24 hours.');
+            
+            // Reset form
+            this.reset();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Slot selection
+        document.querySelectorAll('.slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Treatment option selection
+        document.querySelectorAll('.treatment-option input').forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.value === 'Not Sure') {
+                    // Uncheck all others if "Not Sure" is selected
+                    document.querySelectorAll('.treatment-option input').forEach(i => {
+                        if (i !== this) i.checked = false;
+                    });
+                } else {
+                    // Uncheck "Not Sure" if another option is selected
+                    document.querySelectorAll('.treatment-option input').forEach(i => {
+                        if (i.value === 'Not Sure') i.checked = false;
+                    });
+                }
+            });
+        });
+
+        // Preloader
+        window.addEventListener('load', function() {
+            document.getElementById('preloader').style.display = 'none';
+        });
+
+        // Scroll to top
+        document.querySelector('.scroll-top').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+
+</html>
