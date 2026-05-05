@@ -4,145 +4,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión | Eje Salud</title>
+    <title>Eje Salud | Atención Médica Integral</title>
+    <meta name="description"
+        content="Eje Salud ofrece atención médica de calidad en Médico General, Medicina Interna, Psicología, Podología y Radiología. Agenda tu cita en línea.">
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
+    <!-- Bootstrap 5 CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS (Animate on Scroll) -->
     <link href="assets/css/aos.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
-        .auth-section {
-            min-height: 100vh;
+        /* Hero personalizado para Eje Salud */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
+                url("https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80") center center/cover no-repeat;
+        }
+
+        /* Cards de médicos dinámicos */
+        .medico-card-home {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--light-grey);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .medico-card-home:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .medico-avatar-home {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
             display: flex;
             align-items: center;
-            padding: 120px 0 60px;
-            background: linear-gradient(135deg, #fdf6f8 0%, #f9f0f3 100%);
-        }
-
-        .auth-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(163, 106, 123, 0.12);
-            padding: 48px 40px;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .auth-card h2 {
-            font-family: 'Playfair Display', serif;
-            color: #2b2b2b;
-            margin-bottom: 8px;
-        }
-
-        .auth-card .subtitle {
-            color: #888;
-            font-size: 0.95rem;
-            margin-bottom: 32px;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #444;
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            border: 1.5px solid #e8d5da;
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus {
-            border-color: #c58aa0;
-            box-shadow: 0 0 0 3px rgba(197, 138, 160, 0.15);
-        }
-
-        .btn-auth {
-            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            justify-content: center;
             color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 13px;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
-            letter-spacing: 0.5px;
-            transition: opacity 0.2s, transform 0.1s;
+            font-size: 1.8rem;
+            margin: 0 auto 16px;
         }
 
-        .btn-auth:hover {
-            opacity: 0.92;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-
-        .btn-auth:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .auth-divider {
+        .medico-card-home .card-body {
+            padding: 28px 20px;
             text-align: center;
-            color: #aaa;
-            font-size: 0.9rem;
-            margin: 20px 0;
         }
 
-        .auth-link {
+        .medico-card-home h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2b2b2b;
+            margin-bottom: 4px;
+        }
+
+        .medico-card-home .especialidad-tag {
+            display: inline-block;
+            background: #fdf6f8;
+            border: 1px solid #edd6de;
             color: #a36a7b;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.78rem;
             font-weight: 600;
-            text-decoration: none;
+            margin-bottom: 12px;
         }
 
-        .auth-link:hover {
-            color: #c58aa0;
-            text-decoration: underline;
+        .medico-card-home p {
+            color: #888;
+            font-size: 0.85rem;
+            margin: 0;
         }
 
-        .alert-error {
-            background: #fff0f3;
-            border: 1px solid #f5c2cc;
-            color: #c0392b;
+        /* Skeleton para médicos */
+        .skeleton-medico {
+            background: linear-gradient(90deg, #f5eef0 25%, #ecdde1 50%, #f5eef0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
             border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 0.9rem;
-            display: none;
-            margin-bottom: 20px;
         }
 
-        .input-icon-wrapper {
-            position: relative;
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
-        .input-icon-wrapper .form-control {
-            padding-left: 42px;
+        /* Sección de especialidades */
+        .especialidad-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 12px;
         }
 
-        .input-icon-wrapper .input-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
+        .especialidad-item:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 28px rgba(163, 106, 123, 0.12);
+            color: inherit;
+        }
+
+        .especialidad-item .esp-icon-lg {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #fdf6f8, #f3eaed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #c58aa0;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .especialidad-item h6 {
+            font-weight: 700;
+            color: #2b2b2b;
+            margin: 0 0 2px;
             font-size: 0.95rem;
         }
 
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
+        .especialidad-item p {
             color: #aaa;
-            cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
+            margin: 0;
         }
 
-        .toggle-password:hover {
+        .especialidad-item .arrow {
+            margin-left: auto;
+            color: #e8d5da;
+            transition: all 0.2s;
+        }
+
+        .especialidad-item:hover .arrow {
             color: #a36a7b;
         }
     </style>
@@ -165,10 +180,21 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#about">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#services">Especialidades</a></li>
-                    <li class="nav-item"><a class="nav-link" href="consultation.html">Agendar Cita</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Especialidades</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#medicos">Médicos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contacto</a>
+                    </li>
                     <!-- Sin sesión -->
                     <li class="nav-item ms-lg-2 mt-2 mt-lg-0" id="nav-login">
                         <a class="btn btn-consultation" href="login.html">Iniciar Sesión</a>
@@ -188,47 +214,470 @@
         </div>
     </nav>
 
-    <!-- Auth Section -->
-    <section class="auth-section">
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
         <div class="container">
-            <div class="auth-card" data-aos="fade-up">
-                <h2>Bienvenido de vuelta</h2>
-                <p class="subtitle">Inicia sesión para gestionar tus citas médicas</p>
-
-                <div class="alert-error" id="error-msg">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <span id="error-text"></span>
-                </div>
-
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <h1>Tu salud, en manos de expertos</h1>
+                <p class="hero-subtitle">En Eje Salud combinamos experiencia médica, tecnología y atención humana para
+                    brindarte el cuidado que mereces.</p>
                 <div>
-                    <div class="mb-3">
-                        <label class="form-label" for="email">Correo electrónico</label>
-                        <div class="input-icon-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" class="form-control" id="email" placeholder="tu@correo.com" required>
+                    <a href="consultation.html" class="btn btn-hero btn-primary-hero">Agendar Cita</a>
+                    <a href="#services" class="btn btn-hero btn-outline-hero">Ver Especialidades</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section section-padding" id="about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                    <div class="doctor-img">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Equipo médico de Eje Salud">
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h2>¿Quiénes somos?</h2>
+                    <p class="text-lead">Una clínica comprometida con tu bienestar, con un equipo de médicos
+                        certificados y atención personalizada.</p>
+                    <p>En Eje Salud creemos que la atención médica de calidad debe ser accesible. Contamos con
+                        profesionales especializados en múltiples áreas de la salud, horarios flexibles y un sistema de
+                        citas en línea para que puedas organizar tu consulta desde donde estés.</p>
+
+                    <ul class="credentials mt-4">
+                        <li><i class="fas fa-check-circle"></i> Médicos certificados y con cédula profesional</li>
+                        <li><i class="fas fa-check-circle"></i> 5 especialidades médicas disponibles</li>
+                        <li><i class="fas fa-check-circle"></i> Citas en línea disponibles 24/7</li>
+                        <li><i class="fas fa-check-circle"></i> Atención de lunes a viernes, 8:00 am – 6:00 pm</li>
+                        <li><i class="fas fa-check-circle"></i> Historial y seguimiento de citas en tu cuenta</li>
+                    </ul>
+
+                    <a href="consultation.html" class="btn btn-consultation mt-4">Agendar mi Primera Cita</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Especialidades Section -->
+    <section class="section-padding" id="services">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Nuestras Especialidades</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Atención médica integral en las áreas
+                        que más necesitas.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Servicio 1 -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Médico General">
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <h4>Médico General</h4>
+                            <p>Consultas de medicina general, diagnóstico, seguimiento y orientación para toda la
+                                familia.</p>
+                            <a href="consultation.html" class="btn btn-consultation mt-2">Agendar Cita</a>
                         </div>
                     </div>
-
-                    <div class="mb-4">
-                        <label class="form-label" for="password">Contraseña</label>
-                        <div class="input-icon-wrapper">
-                            <i class="fas fa-lock input-icon"></i>
-                            <input type="password" class="form-control" id="password" placeholder="••••••••" required>
-                            <i class="fas fa-eye toggle-password" id="toggle-pw"></i>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-auth" id="btn-login">
-                        <span id="btn-text">Iniciar Sesión</span>
-                        <span id="btn-spinner" style="display:none;">
-                            <i class="fas fa-circle-notch fa-spin me-2"></i>Entrando...
-                        </span>
-                    </button>
                 </div>
 
-                <div class="auth-divider mt-4">
-                    ¿No tienes cuenta?
-                    <a href="registro.html" class="auth-link">Regístrate aquí</a>
+                <!-- Servicio 2 -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Medicina Interna">
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h4>Medicina Interna</h4>
+                            <p>Diagnóstico y tratamiento de enfermedades crónicas y condiciones complejas del adulto.
+                            </p>
+                            <a href="consultation.html" class="btn btn-consultation mt-2">Agendar Cita</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servicio 3 -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1617854818583-09e7f077a156?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Psicología">
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>Psicología</h4>
+                            <p>Atención psicológica profesional para manejo del estrés, ansiedad, depresión y bienestar
+                                emocional.</p>
+                            <a href="consultation.html" class="btn btn-consultation mt-2">Agendar Cita</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servicio 4 -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Podología">
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon">
+                                <i class="fas fa-shoe-prints"></i>
+                            </div>
+                            <h4>Podología</h4>
+                            <p>Diagnóstico y tratamiento de afecciones del pie y tobillo: uñas, callos, pie diabético y
+                                más.</p>
+                            <a href="consultation.html" class="btn btn-consultation mt-2">Agendar Cita</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servicio 5 -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1516069677018-378971e2d685?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Radiología">
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon">
+                                <i class="fas fa-x-ray"></i>
+                            </div>
+                            <h4>Radiología</h4>
+                            <p>Estudios de imagen diagnóstica: rayos X, ultrasonido y más, con resultados rápidos y
+                                precisos.</p>
+                            <a href="consultation.html" class="btn btn-consultation mt-2">Agendar Cita</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA card -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="service-card d-flex flex-column justify-content-center align-items-center text-center"
+                        style="background: linear-gradient(135deg, #fdf6f8, #f3eaed); border: 2px dashed #e8d5da; min-height: 300px;">
+                        <div class="service-icon" style="margin-bottom: 20px;">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <h4 style="font-family:'Playfair Display',serif; color:#2b2b2b;">¿Listo para tu cita?</h4>
+                        <p style="color:#888; padding: 0 20px;">Agenda en minutos desde nuestra plataforma en línea,
+                            disponible las 24 horas.</p>
+                        <a href="consultation.html" class="btn btn-consultation mt-3">Agendar Ahora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Por qué elegirnos -->
+    <section class="benefits-section section-padding">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">¿Por qué Eje Salud?</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Nos comprometemos a brindarte la mejor
+                        experiencia en atención médica.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h4>Médicos Certificados</h4>
+                        <p>Todo nuestro equipo médico cuenta con cédula profesional, certificaciones vigentes y
+                            capacitación continua.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h4>Citas en Línea</h4>
+                        <p>Agenda, consulta y cancela tus citas desde cualquier dispositivo, a cualquier hora del día.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h4>Atención Personalizada</h4>
+                        <p>Cada paciente recibe atención individualizada adaptada a sus necesidades específicas de
+                            salud.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Privacidad y Seguridad</h4>
+                        <p>Tu información médica y personal está protegida y solo accesible para ti y tu equipo de
+                            atención.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Médicos Section (dinámico desde API) -->
+    <section class="section-padding" id="medicos" style="background: var(--ivory);">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Nuestros Médicos</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Profesionales de la salud comprometidos
+                        con tu bienestar.</p>
+                </div>
+            </div>
+
+            <div class="row" id="medicos-grid">
+                <!-- Skeletons mientras carga -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div
+                        style="background:#fff; border-radius:10px; padding:28px 20px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div class="skeleton-medico"
+                            style="width:80px;height:80px;border-radius:50%;margin:0 auto 16px;"></div>
+                        <div class="skeleton-medico" style="height:16px; width:70%; margin:0 auto 8px;"></div>
+                        <div class="skeleton-medico" style="height:12px; width:50%; margin:0 auto;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div
+                        style="background:#fff; border-radius:10px; padding:28px 20px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div class="skeleton-medico"
+                            style="width:80px;height:80px;border-radius:50%;margin:0 auto 16px;"></div>
+                        <div class="skeleton-medico" style="height:16px; width:70%; margin:0 auto 8px;"></div>
+                        <div class="skeleton-medico" style="height:12px; width:50%; margin:0 auto;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div
+                        style="background:#fff; border-radius:10px; padding:28px 20px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div class="skeleton-medico"
+                            style="width:80px;height:80px;border-radius:50%;margin:0 auto 16px;"></div>
+                        <div class="skeleton-medico" style="height:16px; width:70%; margin:0 auto 8px;"></div>
+                        <div class="skeleton-medico" style="height:12px; width:50%; margin:0 auto;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div
+                        style="background:#fff; border-radius:10px; padding:28px 20px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div class="skeleton-medico"
+                            style="width:80px;height:80px;border-radius:50%;margin:0 auto 16px;"></div>
+                        <div class="skeleton-medico" style="height:16px; width:70%; margin:0 auto 8px;"></div>
+                        <div class="skeleton-medico" style="height:12px; width:50%; margin:0 auto;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="benefits-section section-padding">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Lo que dicen nuestros pacientes</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">La experiencia de quienes confían en
+                        nosotros.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 mb-4" data-aos="fade-right">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"Agendar mi cita fue muy sencillo. El médico fue muy atento y me explicó todo con claridad.
+                            Definitivamente regreso."</p>
+                        <div class="client-info">
+                            <div class="client-avatar"
+                                style="background:#f3eaed; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#a36a7b;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h5>María G.</h5>
+                                <p>Paciente de Medicina Interna</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4" data-aos="fade-up">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"El servicio de psicología fue excelente. Muy profesional y empático. Lo recomiendo
+                            ampliamente a quienes buscan apoyo."</p>
+                        <div class="client-info">
+                            <div class="client-avatar"
+                                style="background:#f3eaed; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#a36a7b;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h5>Carlos R.</h5>
+                                <p>Paciente de Psicología</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4" data-aos="fade-left">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"Me atendieron muy rápido en podología. El sistema de citas es muy práctico y me recordó mi
+                            cita por correo. ¡Excelente!"</p>
+                        <div class="client-info">
+                            <div class="client-avatar"
+                                style="background:#f3eaed; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#a36a7b;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h5>Laura M.</h5>
+                                <p>Paciente de Podología</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section section-padding">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8" data-aos="zoom-in">
+                    <h2>¿Listo para cuidar tu salud?</h2>
+                    <p class="text-lead mb-4" style="color: rgba(255,255,255,0.9);">Agenda tu cita en minutos. Nuestros
+                        médicos están listos para atenderte.</p>
+                    <a href="consultation.html" class="btn btn-cta">Agendar Mi Cita Ahora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section-padding" id="contact">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Contáctanos</h2>
+                    <p class="text-lead" data-aos="fade-up" data-aos-delay="100">Estamos aquí para resolver tus dudas o
+                        ayudarte a agendar.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-7 mb-5 mb-lg-0" data-aos="fade-right">
+                    <div class="contact-form">
+                        <h3 class="mb-4">Envíanos un mensaje</h3>
+                        <form id="contactForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Nombre" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Apellido" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" placeholder="Correo electrónico" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="tel" class="form-control" placeholder="Teléfono">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <select class="form-control">
+                                        <option value="" disabled selected>Motivo de contacto</option>
+                                        <option>Información sobre especialidades</option>
+                                        <option>Dudas sobre mi cita</option>
+                                        <option>Información de precios</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <textarea class="form-control" rows="4" placeholder="Tu mensaje"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-consultation mt-3 w-100">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-5" data-aos="fade-left">
+                    <div class="contact-info">
+                        <h3 class="mb-4">Información de Contacto</h3>
+
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <h5>Ubicación</h5>
+                                <p>Av. Salud 123, Col. Centro<br>Ciudad de México, CDMX</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div>
+                                <h5>Teléfono</h5>
+                                <p>55 1234 5678</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div>
+                                <h5>Correo</h5>
+                                <p>contacto@ejesalud.mx</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <h5>Horario de Atención</h5>
+                                <p>Lunes a Viernes: 8:00 am – 6:00 pm<br>Citas disponibles cada 30 minutos</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -240,15 +689,41 @@
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
                     <a href="index.html" class="footer-brand">Eje Salud</a>
-                    <p>Atención médica de calidad con un enfoque humano y profesional.</p>
+                    <p>Atención médica de calidad con un enfoque humano y profesional. Tu bienestar es nuestra
+                        prioridad.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
-                    <h5 class="text-white mb-3">Enlaces</h5>
+                    <h5 class="text-white mb-3">Navegación</h5>
                     <ul class="footer-links">
                         <li><a href="index.html">Inicio</a></li>
-                        <li><a href="consultation.html">Consulta</a></li>
+                        <li><a href="#about">Nosotros</a></li>
+                        <li><a href="#services">Especialidades</a></li>
+                        <li><a href="#medicos">Médicos</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-white mb-3">Especialidades</h5>
+                    <ul class="footer-links">
+                        <li><a href="consultation.html">Médico General</a></li>
+                        <li><a href="consultation.html">Medicina Interna</a></li>
+                        <li><a href="consultation.html">Psicología</a></li>
+                        <li><a href="consultation.html">Podología</a></li>
+                        <li><a href="consultation.html">Radiología</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="text-white mb-3">Mi Cuenta</h5>
+                    <ul class="footer-links">
                         <li><a href="login.html">Iniciar Sesión</a></li>
                         <li><a href="registro.html">Registrarse</a></li>
+                        <li><a href="mis-citas.html">Mis Citas</a></li>
+                        <li><a href="consultation.html">Agendar Cita</a></li>
                     </ul>
                 </div>
             </div>
@@ -262,71 +737,81 @@
         </div>
     </footer>
 
+    <!-- Scroll to Top Button -->
     <div class="scroll-top">
         <i class="fas fa-chevron-up"></i>
     </div>
 
+    <!-- Bootstrap JS Bundle with Popper -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS (Animate on Scroll) -->
     <script src="assets/js/aos.js"></script>
+    <!-- Custom JavaScript -->
     <script src="assets/js/script.js"></script>
+    <!-- API layer -->
     <script src="assets/js/api.js"></script>
     <script>
-        // Si ya está logueado, redirigir
-        if (Auth.isLoggedIn()) {
-            window.location.href = '/mis-citas.html';
+        // ── Ícono por especialidad ─────────────────────────
+        function iconoEsp(esp) {
+            const m = {
+                'Médico General': 'fa-stethoscope',
+                'Medicina Interna': 'fa-heartbeat',
+                'Psicología': 'fa-brain',
+                'Podología': 'fa-shoe-prints',
+                'Radiología': 'fa-x-ray',
+            };
+            return m[esp] || 'fa-user-md';
         }
 
-        // Toggle mostrar/ocultar contraseña
-        document.getElementById('toggle-pw').addEventListener('click', function () {
-            const input = document.getElementById('password');
-            const isText = input.type === 'text';
-            input.type = isText ? 'password' : 'text';
-            this.className = isText ? 'fas fa-eye toggle-password' : 'fas fa-eye-slash toggle-password';
-        });
-
-        // Login
-        document.getElementById('btn-login').addEventListener('click', async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
-            const errorTxt = document.getElementById('error-text');
-            const btnText = document.getElementById('btn-text');
-            const btnSpinner = document.getElementById('btn-spinner');
-
-            // Ocultar error previo
-            errorMsg.style.display = 'none';
-
-            if (!email || !password) {
-                errorTxt.textContent = 'Por favor completa todos los campos.';
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            // Loading state
-            btnText.style.display = 'none';
-            btnSpinner.style.display = 'inline';
-            document.getElementById('btn-login').disabled = true;
-
+        // ── Cargar médicos desde la API ────────────────────
+        async function cargarMedicos() {
+            const grid = document.getElementById('medicos-grid');
             try {
-                const data = await AuthAPI.login(email, password);
-                // Redirigir según rol
-                if (data.usuario.rol === 'admin') {
-                    window.location.href = '/mis-citas.html';
-                } else {
-                    window.location.href = '/mis-citas.html';
-                }
-            } catch (err) {
-                errorTxt.textContent = err.message || 'Error al iniciar sesión.';
-                errorMsg.style.display = 'block';
-                btnText.style.display = 'inline';
-                btnSpinner.style.display = 'none';
-                document.getElementById('btn-login').disabled = false;
-            }
-        });
+                const data = await MedicosAPI.listar();
+                const medicos = (data.medicos || data).filter(m => m.activo !== false);
 
-        // Permitir Enter para enviar
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('btn-login').click();
+                if (!medicos.length) {
+                    grid.innerHTML = `<div class="col-12 text-center text-muted py-4"><i class="fas fa-user-md fa-2x mb-3"></i><p>Próximamente información de nuestros médicos.</p></div>`;
+                    return;
+                }
+
+                grid.innerHTML = medicos.map((m, i) => `
+                    <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="${(i % 4) * 100}">
+                        <div class="medico-card-home">
+                            <div class="card-body">
+                                <div class="medico-avatar-home">
+                                    <i class="fas ${iconoEsp(m.especialidad)}"></i>
+                                </div>
+                                <h5>Dr. ${m.nombre} ${m.apellido}</h5>
+                                <span class="especialidad-tag">${m.especialidad}</span>
+                                ${m.bio ? `<p>${m.bio.substring(0, 80)}${m.bio.length > 80 ? '...' : ''}</p>` : ''}
+                                <a href="consultation.html" class="btn btn-consultation btn-sm mt-3" style="font-size:0.82rem; padding:6px 16px;">
+                                    <i class="fas fa-calendar-plus me-1"></i>Agendar cita
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                AOS.refresh();
+            } catch (err) {
+                grid.innerHTML = `<div class="col-12 text-center text-muted py-4"><p>No se pudo cargar la información de médicos.</p></div>`;
+            }
+        }
+
+        cargarMedicos();
+
+        // ── Formulario de contacto ─────────────────────────
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type=submit]');
+            btn.textContent = '¡Mensaje enviado!';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.textContent = 'Enviar Mensaje';
+                btn.disabled = false;
+                this.reset();
+            }, 3000);
         });
     </script>
 </body>
