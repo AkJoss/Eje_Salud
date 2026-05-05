@@ -173,3 +173,77 @@ function injectUserInfo() {
     el.textContent = n.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   });
 }
+
+// ── Aliases de compatibilidad (consultation.html de Edgar) ───
+// Auth helpers extra
+Auth.getToken    = () => localStorage.getItem('ejesalud_token');
+Auth.getUsuario  = Auth.getUser;
+Auth.setSession  = (token, usuario) => { Auth.setToken(token); Auth.setUser(usuario); };
+Auth.clearSession = Auth.clear;
+Auth.isLoggedIn  = Auth.isLogged;
+Auth.isAdmin     = () => Auth.rol() === 'admin';
+Auth.isMedico    = () => Auth.rol() === 'medico';
+
+// MedicosAPI → ApiMedicos
+const MedicosAPI = ApiMedicos;
+
+// CitasAPI → ApiCitas (con mover)
+const CitasAPI = {
+  listar:        ApiCitas.listar,
+  obtener:       ApiCitas.obtener,
+  disponibilidad:ApiCitas.disponibilidad,
+  agendar:       ApiCitas.agendar,
+  cancelar:      ApiCitas.cancelar,
+  cambiarEstado: ApiCitas.cambiarEstado,
+  mover:         ApiCitas.mover,
+};
+
+// AuthAPI → ApiAuth (con logout)
+const AuthAPI = {
+  login:    ApiAuth.login,
+  registro: ApiAuth.registro,
+  perfil:   ApiAuth.perfil,
+  logout() {
+    Auth.clear();
+    window.location.href = 'login.html';
+  },
+};
+
+// UI → helpers de navegación y navbar
+const UI = {
+  requireAuth() {
+    if (!Auth.isLogged()) {
+      window.location.href = 'login.html';
+      return false;
+    }
+    return true;
+  },
+  requireAdmin() {
+    if (!Auth.isAdmin()) {
+      window.location.href = 'index.html';
+      return false;
+    }
+    return true;
+  },
+  updateNavbar() {
+    const usuario = Auth.getUser();
+    const navLogin    = document.getElementById('nav-login');
+    const navUsuario  = document.getElementById('nav-usuario');
+    const navNombre   = document.getElementById('nav-nombre');
+    const navLogout   = document.getElementById('nav-logout');
+    const navMisCitas = document.getElementById('nav-mis-citas');
+    if (usuario) {
+      if (navLogin)    navLogin.style.display    = 'none';
+      if (navUsuario)  navUsuario.style.display  = 'flex';
+      if (navNombre)   navNombre.textContent     = usuario.nombre || '';
+      if (navMisCitas) navMisCitas.style.display = 'block';
+      if (navLogout)   navLogout.addEventListener('click', () => AuthAPI.logout());
+    } else {
+      if (navLogin)    navLogin.style.display    = 'block';
+      if (navUsuario)  navUsuario.style.display  = 'none';
+      if (navMisCitas) navMisCitas.style.display = 'none';
+    }
+  },
+};
+
+document.addEventListener('DOMContentLoaded', () => UI.updateNavbar());
