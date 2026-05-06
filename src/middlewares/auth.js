@@ -21,7 +21,8 @@ exports.proteger = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const usuario = await User.findById(decoded.id);
+
+    const usuario = await User.findByPk(decoded.id);
 
     if (!usuario || !usuario.activo) {
       return res.status(401).json({
@@ -33,7 +34,10 @@ exports.proteger = async (req, res, next) => {
     req.usuario = usuario;
     next();
   } catch (error) {
-    return res.status(401).json({ ok: false, mensaje: 'Token inválido.' });
+    return res.status(401).json({
+      ok: false,
+      mensaje: 'Token inválido.',
+    });
   }
 };
 
@@ -46,6 +50,7 @@ exports.restringirA = (...roles) => {
         mensaje: 'No tienes permiso para realizar esta acción.',
       });
     }
+
     next();
   };
 };

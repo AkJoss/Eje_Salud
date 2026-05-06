@@ -1,55 +1,66 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
 
-const citaSchema = new mongoose.Schema(
+const Cita = sequelize.define(
+  'Cita',
   {
-    paciente: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'El paciente es requerido'],
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    medico: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Medico',
-      required: [true, 'El médico es requerido'],
+    pacienteId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'paciente_id',
+    },
+    medicoId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'medico_id',
     },
     especialidad: {
-      type: String,
-      required: [true, 'La especialidad es requerida'],
-      enum: [
+      type: DataTypes.ENUM(
         'Médico General',
         'Medicina Interna',
         'Psicología',
         'Podología',
-        'Radiología',
-      ],
+        'Radiología'
+      ),
+      allowNull: false,
     },
     fecha: {
-      type: Date,
-      required: [true, 'La fecha es requerida'],
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     hora: {
-      type: String,
-      required: [true, 'La hora es requerida'], // "10:30"
+      type: DataTypes.TIME,
+      allowNull: false,
     },
     motivo: {
-      type: String,
-      required: [true, 'El motivo de consulta es requerido'],
-      maxlength: 500,
+      type: DataTypes.STRING(500),
+      allowNull: false,
     },
     estado: {
-      type: String,
-      enum: ['pendiente', 'confirmada', 'cancelada', 'completada'],
-      default: 'pendiente',
+      type: DataTypes.ENUM('pendiente', 'confirmada', 'cancelada', 'completada'),
+      defaultValue: 'pendiente',
     },
     notas: {
-      type: String, // Notas del médico post-consulta
-      maxlength: 1000,
+      type: DataTypes.STRING(1000),
+      allowNull: true,
     },
   },
-  { timestamps: true }
+  {
+    tableName: 'citas',
+    timestamps: true,
+    underscored: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['medico_id', 'fecha', 'hora'],
+      },
+    ],
+  }
 );
 
-// Índice para evitar doble cita del mismo médico a la misma hora
-citaSchema.index({ medico: 1, fecha: 1, hora: 1 }, { unique: true });
-
-module.exports = mongoose.model('Cita', citaSchema);
+module.exports = Cita;

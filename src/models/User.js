@@ -1,62 +1,74 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const { sequelize } = require('../config/database');
 
-const userSchema = new mongoose.Schema(
+const User = sequelize.define(
+  'User',
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     nombre: {
-      type: String,
-      required: [true, 'El nombre es requerido'],
-      trim: true,
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     apellido: {
-      type: String,
-      required: [true, 'El apellido es requerido'],
-      trim: true,
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     email: {
-      type: String,
-      required: [true, 'El email es requerido'],
+      type: DataTypes.STRING(150),
+      allowNull: false,
       unique: true,
-      lowercase: true,
-      trim: true,
+      validate: {
+        isEmail: true,
+      },
     },
     telefono: {
-      type: String,
-      required: [true, 'El teléfono es requerido'],
-      trim: true,
+      type: DataTypes.STRING(20),
+      allowNull: false,
     },
     fechaNacimiento: {
-      type: Date,
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      field: 'fecha_nacimiento',
     },
     password: {
-      type: String,
-      required: [true, 'La contraseña es requerida'],
-      minlength: 6,
-      select: false,
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
     rol: {
-      type: String,
-      enum: ['paciente', 'medico', 'admin'],
-      default: 'paciente',
+      type: DataTypes.ENUM('paciente', 'medico', 'admin'),
+      defaultValue: 'paciente',
     },
     activo: {
-      type: Boolean,
-      default: true,
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
   },
-  { timestamps: true }
+  {
+    tableName: 'users',
+    timestamps: true,
+    underscored: true,
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.password) {
+          user.password = await bcrypt.hash(user.password, 12);
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed('password')) {
+          user.password = await bcrypt.hash(user.password, 12);
+        }
+      },
+    },
+  }
 );
 
-// Encriptar contraseña antes de guardar
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
-});
-
-// Comparar contraseñas
-userSchema.methods.compararPassword = async function (passwordIngresada) {
+User.prototype.compararPassword = async function (passwordIngresada) {
   return await bcrypt.compare(passwordIngresada, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

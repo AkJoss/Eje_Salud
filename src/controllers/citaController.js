@@ -1,66 +1,148 @@
-const Cita = require('../models/Cita');
-const Medico = require('../models/Medico');
+const { Op } = require('sequelize');
+const { Cita, Medico, User } = require('../models');
 
-// GET /api/citas  — admin ve todas; paciente ve las suyas; médico ve las suyas
+// GET /api/citas — admin ve todas; paciente ve las suyas; médico ve las suyas
 exports.listarCitas = async (req, res) => {
   try {
     let filtro = {};
+
     if (req.usuario.rol === 'paciente') {
-      filtro = { paciente: req.usuario._id };
+      filtro = { pacienteId: req.usuario.id };
     } else if (req.usuario.rol === 'medico') {
-      // Buscar el documento Medico vinculado por email
-      const medicoDoc = await Medico.findOne({ email: req.usuario.email });
-      if (!medicoDoc) return res.status(200).json({ ok: true, total: 0, citas: [] });
-      filtro = { medico: medicoDoc._id };
+      // Buscar el médico vinculado por email
+      const medicoDoc = await Medico.findOne({
+        where: { email: req.usuario.email },
+      });
+
+      if (!medicoDoc) {
+        return res.status(200).json({
+          ok: true,
+          total: 0,
+          citas: [],
+        });
+      }
+
+      filtro = { medicoId: medicoDoc.id };
     }
-    // admin → filtro = {} (ve todas)
 
-    const citas = await Cita.find(filtro)
-      .populate('paciente', 'nombre apellido email telefono')
-      .populate('medico', 'nombre apellido especialidad')
-      .sort({ fecha: 1 })
-      .select('-__v');
+    // admin → filtro = {} y ve todas
+    const citas = await Cita.findAll({
+      where: filtro,
+      include: [
+        {
+          model: User,
+          as: 'paciente',
+          attributes: ['id', 'nombre', 'apellido', 'email', 'telefono'],
+        },
+        {
+          model: Medico,
+          as: 'medico',
+          attributes: ['id', 'nombre', 'apellido', 'especialidad'],
+        },
+      ],
+      order: [['fecha', 'ASC'], ['hora', 'ASC']],
+    });
 
-    res.status(200).json({ ok: true, total: citas.length, citas });
+    res.status(200).json({
+      ok: true,
+      total: citas.length,
+      citas,
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al obtener citas.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al obtener citas.',
+      error: error.message,
+    });
   }
 };
 
 // GET /api/citas/:id
 exports.obtenerCita = async (req, res) => {
   try {
-    const cita = await Cita.findById(req.params.id)
-      .populate('paciente', 'nombre apellido email telefono')
-      .populate('medico', 'nombre apellido especialidad');
+    const cita = await Cita.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'paciente',
+          attributes: ['id', 'nombre', 'apellido', 'email', 'telefono'],
+        },
+        {
+          model: Medico,
+          as: 'medico',
+          attributes: ['id', 'nombre', 'apellido', 'especialidad'],
+        },
+      ],
+    });
 
     if (!cita) {
-      return res.status(404).json({ ok: false, mensaje: 'Cita no encontrada.' });
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Cita no encontrada.',
+      });
     }
 
     // Paciente solo puede ver sus propias citas
     if (
-      req.usuario.rol !== 'admin' &&
-      cita.paciente._id.toString() !== req.usuario._id.toString()
+      req.usuario.rol === 'paciente' &&
+      cita.pacienteId !== req.usuario.id
     ) {
-      return res.status(403).json({ ok: false, mensaje: 'No tienes acceso a esta cita.' });
+      return res.status(403).json({
+        ok: false,
+        mensaje: 'No tienes acceso a esta cita.',
+      });
     }
 
-    res.status(200).json({ ok: true, cita });
+    // Médico solo puede ver sus propias citas
+    if (req.usuario.rol === 'medico') {
+      const medicoDoc = await Medico.findOne({
+        where: { email: req.usuario.email },
+      });
+
+      if (!medicoDoc || cita.medicoId !== medicoDoc.id) {
+        return res.status(403).json({
+          ok: false,
+          mensaje: 'No tienes acceso a esta cita.',
+        });
+      }
+    }
+
+    res.status(200).json({
+      ok: true,
+      cita,
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al obtener cita.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al obtener cita.',
+      error: error.message,
+    });
   }
 };
 
-// POST /api/citas  — paciente agenda una cita
+// POST /api/citas — paciente agenda una cita
 exports.crearCita = async (req, res) => {
   try {
-    const { medico, especialidad, fecha, hora, motivo } = req.body;
+    const { medico, medicoId, especialidad, fecha, hora, motivo } = req.body;
+
+    // Acepta medico o medicoId para no romper el frontend
+    const idMedico = medicoId || medico;
+
+    if (!idMedico) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'El médico es requerido.',
+      });
+    }
 
     // Verificar que el médico existe y está activo
-    const medicoDoc = await Medico.findById(medico);
+    const medicoDoc = await Medico.findByPk(idMedico);
+
     if (!medicoDoc || !medicoDoc.activo) {
-      return res.status(404).json({ ok: false, mensaje: 'Médico no encontrado o inactivo.' });
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Médico no encontrado o inactivo.',
+      });
     }
 
     // Verificar que la especialidad coincide con el médico
@@ -71,12 +153,16 @@ exports.crearCita = async (req, res) => {
       });
     }
 
-    // Verificar disponibilidad (sin duplicar hora/médico/fecha)
+    // Verificar disponibilidad sin duplicar médico/fecha/hora
     const citaExistente = await Cita.findOne({
-      medico,
-      fecha: new Date(fecha),
-      hora,
-      estado: { $ne: 'cancelada' },
+      where: {
+        medicoId: idMedico,
+        fecha,
+        hora,
+        estado: {
+          [Op.ne]: 'cancelada',
+        },
+      },
     });
 
     if (citaExistente) {
@@ -87,102 +173,192 @@ exports.crearCita = async (req, res) => {
     }
 
     const cita = await Cita.create({
-      paciente: req.usuario._id,
-      medico,
+      pacienteId: req.usuario.id,
+      medicoId: idMedico,
       especialidad,
       fecha,
       hora,
       motivo,
     });
 
-    await cita.populate('medico', 'nombre apellido especialidad');
+    const citaCompleta = await Cita.findByPk(cita.id, {
+      include: [
+        {
+          model: User,
+          as: 'paciente',
+          attributes: ['id', 'nombre', 'apellido', 'email', 'telefono'],
+        },
+        {
+          model: Medico,
+          as: 'medico',
+          attributes: ['id', 'nombre', 'apellido', 'especialidad'],
+        },
+      ],
+    });
 
-    res.status(201).json({ ok: true, mensaje: 'Cita agendada exitosamente.', cita });
+    res.status(201).json({
+      ok: true,
+      mensaje: 'Cita agendada exitosamente.',
+      cita: citaCompleta,
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al crear cita.', error: error.message });
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({
+        ok: false,
+        mensaje: 'El médico ya tiene una cita en ese horario. Elige otra hora.',
+      });
+    }
+
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al crear cita.',
+      error: error.message,
+    });
   }
 };
 
-// PUT /api/citas/:id/estado  — admin cambia estado
+// PUT /api/citas/:id/estado — admin cambia estado
 exports.actualizarEstado = async (req, res) => {
   try {
     const { estado } = req.body;
     const estadosValidos = ['pendiente', 'confirmada', 'cancelada', 'completada'];
 
     if (!estadosValidos.includes(estado)) {
-      return res.status(400).json({ ok: false, mensaje: 'Estado no válido.' });
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Estado no válido.',
+      });
     }
 
-    const cita = await Cita.findByIdAndUpdate(
-      req.params.id,
-      { estado },
-      { new: true }
-    ).populate('paciente', 'nombre apellido email');
+    const cita = await Cita.findByPk(req.params.id);
 
     if (!cita) {
-      return res.status(404).json({ ok: false, mensaje: 'Cita no encontrada.' });
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Cita no encontrada.',
+      });
     }
 
-    res.status(200).json({ ok: true, mensaje: `Cita marcada como ${estado}.`, cita });
+    await cita.update({ estado });
+
+    const citaActualizada = await Cita.findByPk(cita.id, {
+      include: [
+        {
+          model: User,
+          as: 'paciente',
+          attributes: ['id', 'nombre', 'apellido', 'email'],
+        },
+        {
+          model: Medico,
+          as: 'medico',
+          attributes: ['id', 'nombre', 'apellido', 'especialidad'],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      ok: true,
+      mensaje: `Cita marcada como ${estado}.`,
+      cita: citaActualizada,
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al actualizar estado.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al actualizar estado.',
+      error: error.message,
+    });
   }
 };
 
-// DELETE /api/citas/:id  — paciente cancela su propia cita
+// DELETE /api/citas/:id — paciente cancela su propia cita
 exports.cancelarCita = async (req, res) => {
   try {
-    const cita = await Cita.findById(req.params.id);
+    const cita = await Cita.findByPk(req.params.id);
 
     if (!cita) {
-      return res.status(404).json({ ok: false, mensaje: 'Cita no encontrada.' });
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Cita no encontrada.',
+      });
     }
 
     // Solo el paciente dueño o un admin pueden cancelar
     if (
       req.usuario.rol !== 'admin' &&
-      cita.paciente.toString() !== req.usuario._id.toString()
+      cita.pacienteId !== req.usuario.id
     ) {
-      return res.status(403).json({ ok: false, mensaje: 'No puedes cancelar esta cita.' });
+      return res.status(403).json({
+        ok: false,
+        mensaje: 'No puedes cancelar esta cita.',
+      });
     }
 
-    cita.estado = 'cancelada';
-    await cita.save();
+    await cita.update({ estado: 'cancelada' });
 
-    res.status(200).json({ ok: true, mensaje: 'Cita cancelada correctamente.' });
+    res.status(200).json({
+      ok: true,
+      mensaje: 'Cita cancelada correctamente.',
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al cancelar cita.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al cancelar cita.',
+      error: error.message,
+    });
   }
 };
 
-// GET /api/citas/disponibilidad  — ver horas disponibles de un médico en una fecha
+// GET /api/citas/disponibilidad — ver horas disponibles de un médico en una fecha
 exports.disponibilidad = async (req, res) => {
   try {
     const { medicoId, fecha } = req.query;
 
     if (!medicoId || !fecha) {
-      return res.status(400).json({ ok: false, mensaje: 'Se requiere medicoId y fecha.' });
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Se requiere medicoId y fecha.',
+      });
     }
 
-    const citasOcupadas = await Cita.find({
-      medico: medicoId,
-      fecha: new Date(fecha),
-      estado: { $ne: 'cancelada' },
-    }).select('hora');
+    const citasOcupadas = await Cita.findAll({
+      where: {
+        medicoId,
+        fecha,
+        estado: {
+          [Op.ne]: 'cancelada',
+        },
+      },
+      attributes: ['hora'],
+    });
 
-    const horasOcupadas = citasOcupadas.map((c) => c.hora);
+    const horasOcupadas = citasOcupadas.map((c) => {
+      // MySQL puede devolver TIME como "10:30:00"; lo convertimos a "10:30"
+      return String(c.hora).slice(0, 5);
+    });
 
     // Horario general de la clínica: 8am - 6pm, cada 30 min
-    const horariosClínica = [];
+    const horariosClinica = [];
+
     for (let h = 8; h < 18; h++) {
-      horariosClínica.push(`${String(h).padStart(2, '0')}:00`);
-      horariosClínica.push(`${String(h).padStart(2, '0')}:30`);
+      horariosClinica.push(`${String(h).padStart(2, '0')}:00`);
+      horariosClinica.push(`${String(h).padStart(2, '0')}:30`);
     }
 
-    const disponibles = horariosClínica.filter((h) => !horasOcupadas.includes(h));
+    const disponibles = horariosClinica.filter(
+      (h) => !horasOcupadas.includes(h)
+    );
 
-    res.status(200).json({ ok: true, fecha, horasDisponibles: disponibles, horasOcupadas });
+    res.status(200).json({
+      ok: true,
+      fecha,
+      horasDisponibles: disponibles,
+      horasOcupadas,
+    });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al consultar disponibilidad.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al consultar disponibilidad.',
+      error: error.message,
+    });
   }
 };
