@@ -1,69 +1,67 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
 
-const horarioSchema = new mongoose.Schema({
-  dia: {
-    type: String,
-    enum: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
-    required: true,
-  },
-  horaInicio: { type: String, required: true }, // "09:00"
-  horaFin:    { type: String, required: true }, // "17:00"
-});
-
-const medicoSchema = new mongoose.Schema(
+const Medico = sequelize.define(
+  'Medico',
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     nombre: {
-      type: String,
-      required: [true, 'El nombre del médico es requerido'],
-      trim: true,
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     apellido: {
-      type: String,
-      required: [true, 'El apellido del médico es requerido'],
-      trim: true,
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     especialidad: {
-      type: String,
-      required: [true, 'La especialidad es requerida'],
-      enum: [
+      type: DataTypes.ENUM(
         'Médico General',
         'Medicina Interna',
         'Psicología',
         'Podología',
-        'Radiología',
-      ],
+        'Radiología'
+      ),
+      allowNull: false,
     },
     cedula: {
-      type: String,
-      required: [true, 'La cédula profesional es requerida'],
+      type: DataTypes.STRING(50),
+      allowNull: false,
       unique: true,
-      trim: true,
     },
     email: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING(150),
+      allowNull: false,
       unique: true,
-      lowercase: true,
+      validate: {
+        isEmail: true,
+      },
     },
     telefono: {
-      type: String,
-      trim: true,
+      type: DataTypes.STRING(20),
+      allowNull: true,
     },
     bio: {
-      type: String,
-      maxlength: 500,
+      type: DataTypes.STRING(500),
+      allowNull: true,
     },
     foto: {
-      type: String,
-      default: '',
+      type: DataTypes.STRING(255),
+      defaultValue: '',
     },
-    horarios: [horarioSchema],
     activo: {
-      type: Boolean,
-      default: true,
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
   },
-  { timestamps: true }
+  {
+    tableName: 'medicos',
+    timestamps: true,
+    underscored: true,
+  }
 );
 
-module.exports = mongoose.model('Medico', medicoSchema);
+module.exports = Medico;

@@ -13,9 +13,15 @@ exports.registro = async (req, res) => {
   try {
     const { nombre, apellido, email, telefono, fechaNacimiento, password } = req.body;
 
-    const existeUsuario = await User.findOne({ email });
+    const existeUsuario = await User.findOne({
+      where: { email },
+    });
+
     if (existeUsuario) {
-      return res.status(400).json({ ok: false, mensaje: 'Este email ya está registrado.' });
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Este email ya está registrado.',
+      });
     }
 
     const usuario = await User.create({
@@ -27,13 +33,13 @@ exports.registro = async (req, res) => {
       password,
     });
 
-    const token = generarToken(usuario._id);
+    const token = generarToken(usuario.id);
 
     res.status(201).json({
       ok: true,
       token,
       usuario: {
-        id: usuario._id,
+        id: usuario.id,
         nombre: usuario.nombre,
         apellido: usuario.apellido,
         email: usuario.email,
@@ -41,7 +47,11 @@ exports.registro = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al registrar usuario.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al registrar usuario.',
+      error: error.message,
+    });
   }
 };
 
@@ -51,25 +61,37 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ ok: false, mensaje: 'Email y contraseña son requeridos.' });
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Email y contraseña son requeridos.',
+      });
     }
 
-    const usuario = await User.findOne({ email }).select('+password');
+    const usuario = await User.findOne({
+      where: { email },
+    });
+
     if (!usuario || !(await usuario.compararPassword(password))) {
-      return res.status(401).json({ ok: false, mensaje: 'Email o contraseña incorrectos.' });
+      return res.status(401).json({
+        ok: false,
+        mensaje: 'Email o contraseña incorrectos.',
+      });
     }
 
     if (!usuario.activo) {
-      return res.status(401).json({ ok: false, mensaje: 'Tu cuenta ha sido desactivada.' });
+      return res.status(401).json({
+        ok: false,
+        mensaje: 'Tu cuenta ha sido desactivada.',
+      });
     }
 
-    const token = generarToken(usuario._id);
+    const token = generarToken(usuario.id);
 
     res.status(200).json({
       ok: true,
       token,
       usuario: {
-        id: usuario._id,
+        id: usuario.id,
         nombre: usuario.nombre,
         apellido: usuario.apellido,
         email: usuario.email,
@@ -77,7 +99,11 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ ok: false, mensaje: 'Error al iniciar sesión.', error: error.message });
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al iniciar sesión.',
+      error: error.message,
+    });
   }
 };
 
@@ -86,7 +112,7 @@ exports.perfil = async (req, res) => {
   res.status(200).json({
     ok: true,
     usuario: {
-      id: req.usuario._id,
+      id: req.usuario.id,
       nombre: req.usuario.nombre,
       apellido: req.usuario.apellido,
       email: req.usuario.email,
