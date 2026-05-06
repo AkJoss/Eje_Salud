@@ -2,11 +2,13 @@
 
 Backend REST con Node.js + Express + MongoDB para la clínica Eje Salud.
 
+> ⚠️ **Pendiente de migración:** la base de datos actual es MongoDB. Se requiere migrar a SQL (MySQL o PostgreSQL). Ver sección [Migración a SQL](#-migración-a-sql-pendiente) al final de este documento.
+
 ---
 
 ## Requisitos
 - Node.js 18+
-- MongoDB local o Atlas
+- MongoDB local o Atlas *(actual — a reemplazar por SQL)*
 
 ---
 
@@ -73,7 +75,7 @@ eje-salud/
 ├── backend/                        # Servidor Node.js + Express
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── database.js         # Conexión MongoDB
+│   │   │   └── database.js         # Conexión MongoDB → reemplazar por SQL
 │   │   ├── controllers/
 │   │   │   ├── authController.js
 │   │   │   ├── medicoController.js
@@ -153,3 +155,123 @@ Respuesta:
   }
 }
 ```
+
+---
+
+## 🔄 Migración a SQL (pendiente)
+
+La base de datos actual usa **MongoDB con Mongoose**. Se requiere migrar a una base de datos relacional SQL (se recomienda **MySQL 8** o **PostgreSQL 15+**).
+
+### Contexto actual
+
+| Elemento | Estado actual |
+|----------|--------------|
+| Base de datos | MongoDB (local o Atlas) |
+| ODM | Mongoose |
+| Conexión | `src/config/database.js` vía `MONGODB_URI` |
+| Modelos | `User.js`, `Medico.js`, `Cita.js` en `src/models/` |
+
+Los modelos actuales de Mongoose definen documentos sin relaciones explícitas (referencias por `ObjectId`). Al migrar a SQL, estas referencias pasan a ser llaves foráneas en tablas relacionadas.
+
+### Esquema relacional propuesto
+
+A continuación se muestra la estructura equivalente en SQL para los tres modelos existentes:
+
+```sql
+-- Usuarios (pacientes y admins)
+CREATE TABLE users (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  nombre      VARCHAR(100) NOT NULL,
+  email       VARCHAR(150) NOT NULL UNIQUE,
+  password    VARCHAR(255) NOT NULL,        -- hash bcrypt
+  rol         ENUM('paciente', 'admin') NOT NULL DEFAULT 'paciente',
+  telefono    VARCHAR(20),
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Médicos
+CREATE TABLE medicos (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  nombre        VARCHAR(100) NOT NULL,
+  especialidad  VARCHAR(100) NOT NULL,
+  email         VARCHAR(150) UNIQUE,
+  telefono      VARCHAR(20),
+  activo        BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Horarios disponibles de cada médico
+CREATE TABLE horarios (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  medico_id   INT NOT NULL,
+  dia_semana  TINYINT NOT NULL,   -- 0=lunes … 6=domingo
+  hora_inicio TIME NOT NULL,
+  hora_fin    TIME NOT NULL,
+  FOREIGN KEY (medico_id) REFERENCES medicos(id) ON DELETE CASCADE
+);
+
+-- Citas médicas
+CREATE TABLE citas (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  paciente_id   INT NOT NULL,
+  medico_id     INT NOT NULL,
+  especialidad  VARCHAR(100) NOT NULL,
+  fecha         DATE NOT NULL,
+  hora          TIME NOT NULL,
+  motivo        TEXT,
+  estado        ENUM('pendiente', 'confirmada', 'cancelada', 'completada') NOT NULL DEFAULT 'pendiente',
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (paciente_id) REFERENCES users(id),
+  FOREIGN KEY (medico_id)   REFERENCES medicos(id)
+);
+```
+
+### Pasos requeridos para la migración
+
+1. **Instalar dependencias SQL.** Reemplazar `mongoose` por un ORM o driver SQL. Opciones recomendadas:
+   - **Sequelize** (`npm install sequelize mysql2`) — ORM similar a Mongoose, menor fricción de migración.
+   - **Prisma** (`npm install prisma @prisma/client`) — esquema declarativo y migraciones integradas.
+   - **mysql2** directo si se prefiere SQL puro sin ORM.
+
+2. **Actualizar `src/config/database.js`.** Reemplazar la conexión Mongoose por la conexión SQL correspondiente al ORM elegido.
+
+3. **Reescribir los modelos** (`User.js`, `Medico.js`, `Cita.js`) como modelos Sequelize/Prisma o como clases que usen consultas SQL directas. El esquema propuesto arriba es la referencia.
+
+4. **Actualizar los controllers.** Reemplazar métodos Mongoose (`find`, `findById`, `save`, etc.) por las consultas SQL equivalentes. Los endpoints y su lógica de negocio no cambian.
+
+5. **Actualizar variables de entorno.** Reemplazar `MONGODB_URI` por las variables de conexión SQL:
+
+```env
+# Reemplazar esto:
+MONGODB_URI=mongodb://localhost:27017/eje-salud
+
+# Por esto (ejemplo MySQL):
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=eje_salud
+DB_USER=usuario
+DB_PASSWORD=contraseña
+
+JWT_SECRET=clave_super_secreta
+JWT_EXPIRES_IN=7d
+PORT=5000
+```
+
+6. **Crear la base de datos** en el servidor SQL antes de arrancar:
+
+```sql
+CREATE DATABASE eje_salud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+7. **Ejecutar migraciones** para crear las tablas (con Sequelize: `sequelize db:migrate`; con Prisma: `prisma migrate dev`).
+
+8. **Actualizar `.env.example`** con las nuevas variables para que otros desarrolladores puedan configurar su entorno.
+
+### Lo que NO cambia
+
+- Todos los endpoints (`/api/auth`, `/api/medicos`, `/api/citas`) y sus rutas.
+- La lógica de autenticación JWT (`src/middlewares/auth.js`).
+- El frontend — consume los mismos endpoints y espera las mismas respuestas JSON.
+- Los campos en las respuestas JSON (pueden mantenerse idénticos; solo cambia `_id` → `id`).
+
+> **Nota sobre `_id` → `id`:** MongoDB usa `_id` (string hex) como identificador; SQL usa `id` (entero). Si el frontend o los controllers referencian `_id`, deben actualizarse a `id` en todos los puntos donde se construya o consuma el JSON.
