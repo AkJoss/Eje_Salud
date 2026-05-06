@@ -267,6 +267,62 @@ CREATE DATABASE eje_salud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 8. **Actualizar `.env.example`** con las nuevas variables para que otros desarrolladores puedan configurar su entorno.
 
+### Seeders necesarios
+
+Al migrar a SQL, dos conjuntos de datos iniciales deben insertarse con seeders antes de que la aplicación funcione correctamente:
+
+**1. Usuario admin**
+
+En MongoDB se creó manualmente desde mongosh. En SQL esto debe automatizarse para que cualquier desarrollador pueda levantar el proyecto sin pasos manuales. Con Sequelize crea `seeders/20240001-admin.js`:
+
+```js
+const bcrypt = require('bcryptjs');
+
+module.exports = {
+  up: async (queryInterface) => {
+    await queryInterface.bulkInsert('users', [{
+      nombre:     'Admin',
+      email:      'admin@ejesalud.com',
+      password:   await bcrypt.hash('admin123', 10),
+      rol:        'admin',
+      created_at: new Date()
+    }]);
+  },
+  down: async (queryInterface) => {
+    await queryInterface.bulkDelete('users', { email: 'admin@ejesalud.com' });
+  }
+};
+```
+
+**2. Especialidades**
+
+Las especialidades actualmente están hardcodeadas en el frontend y en los controllers. En SQL deben tener su propia tabla y seeder. Con Sequelize crea `seeders/20240002-especialidades.js`:
+
+```js
+module.exports = {
+  up: async (queryInterface) => {
+    await queryInterface.bulkInsert('especialidades', [
+      { nombre: 'Médico General',   created_at: new Date() },
+      { nombre: 'Medicina Interna', created_at: new Date() },
+      { nombre: 'Psicología',       created_at: new Date() },
+      { nombre: 'Podología',        created_at: new Date() },
+      { nombre: 'Radiología',       created_at: new Date() },
+    ]);
+  },
+  down: async (queryInterface) => {
+    await queryInterface.bulkDelete('especialidades', null, {});
+  }
+};
+```
+
+Para correr los seeders después de las migraciones:
+
+```bash
+sequelize db:seed:all
+```
+
+> **Nota:** Cambia la contraseña del admin antes de subir a producción. El seeder es solo para desarrollo y CI.
+
 ### Lo que NO cambia
 
 - Todos los endpoints (`/api/auth`, `/api/medicos`, `/api/citas`) y sus rutas.

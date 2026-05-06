@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin | Eje Salud</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/botox-injection.png">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Montserrat', sans-serif; }
+
+        body { background: #f9f6f8; min-height: 100vh; }
+
+        /* ── LOGIN ── */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fdf6f8, #f3eaed);
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 40px rgba(163, 106, 123, 0.12);
+        }
+
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            color: #a36a7b;
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.88rem;
+            margin-bottom: 32px;
+        }
+
+        .login-input {
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            width: 100%;
+            margin-bottom: 16px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .login-input:focus {
+            border-color: #c58aa0;
+            box-shadow: 0 0 0 3px rgba(197, 138, 160, 0.15);
+        }
+
+        .btn-admin-primary {
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-admin-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-admin-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+        .login-error {
+            background: #fff0f3;
+            border: 1px solid #f5c2cc;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* ── PANEL PRINCIPAL ── */
+        .admin-wrapper { display: none; min-height: 100vh; flex-direction: column; }
+
+        .admin-navbar {
+            background: #fff;
+            border-bottom: 1px solid #f0e4e8;
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(163, 106, 123, 0.07);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-brand {
+            font-family: 'Playfair Display', serif;
+            color: #a36a7b;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .admin-brand span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            color: #bbb;
+            font-weight: 400;
+            margin-left: 8px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            color: #555;
+        }
+
+        .btn-logout {
+            background: none;
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            color: #a36a7b;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { background: #fdf6f8; border-color: #c58aa0; }
+
+        .admin-content { padding: 36px 32px; flex: 1; }
+
+        /* ── TARJETA DE SECCIÓN ── */
+        .admin-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 32px;
+            box-shadow: 0 4px 20px rgba(163, 106, 123, 0.07);
+        }
+
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0e4e8;
+        }
+
+        .admin-card-title {
+            font-family: 'Playfair Display', serif;
+            color: #2b2b2b;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .btn-nuevo {
+            background: linear-gradient(135deg, #c58aa0, #a36a7b);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nuevo:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* ── TABLA ── */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 10px 14px;
+            color: #a36a7b;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f0e4e8;
+            background: #fdf6f8;
+        }
+
+        .admin-table td {
+            padding: 14px;
+            border-bottom: 1px solid #f9f0f3;
+            color: #444;
+            vertical-align: middle;
+        }
+
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tr:hover td { background: #fdf6f8; }
+
+        .badge-activo {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-inactivo {
+            background: #ffeee8;
+            color: #c0392b;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .btn-tbl {
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: opacity 0.2s;
+        }
+
+        .btn-tbl:hover { opacity: 0.8; }
+        .btn-tbl-edit { background: #f0e4e8; color: #a36a7b; }
+        .btn-tbl-delete { background: #ffeee8; color: #c0392b; }
+
+        .table-empty {
+            text-align: center;
+            padding: 40px;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .table-loading {
+            text-align: center;
+            padding: 40px;
+            color: #c58aa0;
+            font-size: 0.9rem;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 16px 48px rgba(163, 106, 123, 0.18);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            color: #2b2b2b;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f0e4e8;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #bbb;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close:hover { color: #a36a7b; }
+
+        .form-label-admin {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input-admin {
+            border: 1.5px solid #e8d5da;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-bottom: 16px;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input-admin:focus {
+            border-color: #c58aa0;
+            box-shadow: 0 0 0 3px rgba(197,138,160,0.15);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .btn-cancelar {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 0.88rem;
+            color: #777;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-cancelar:hover { background: #eee; }
+
+        .modal-error {
+            background: #fff0f3;
+            border: 1px solid #f5c2cc;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* ── CONFIRM MODAL ── */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-overlay.open { display: flex; }
+
+        .confirm-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 28px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .confirm-icon {
+            font-size: 2.2rem;
+            color: #e74c3c;
+            margin-bottom: 14px;
+        }
+
+        .confirm-box h5 {
+            font-weight: 700;
+            color: #2b2b2b;
+            margin-bottom: 8px;
+        }
+
+        .confirm-box p {
+            color: #888;
+            font-size: 0.88rem;
+            margin-bottom: 24px;
+        }
+
+        .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+
+        .btn-confirm-delete {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media (max-width: 576px) {
+            .admin-content { padding: 20px 16px; }
+            .admin-card { padding: 20px 16px; }
+            .admin-navbar { padding: 0 16px; }
+            .modal-box { padding: 24px 18px; margin: 0 12px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════════════════
+         PANTALLA DE LOGIN
+    ══════════════════════════════════════════ -->
+    <div class="login-wrapper" id="login-screen">
+        <div class="login-card">
+            <div class="login-logo"><i class="fas fa-heartbeat me-2"></i>Eje Salud</div>
+            <p class="login-subtitle">Panel de administración — acceso restringido</p>
+
+            <div class="login-error" id="login-error">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="login-error-text"></span>
+            </div>
+
+            <input class="login-input" type="email" id="input-email" placeholder="Correo electrónico" autocomplete="email">
+            <input class="login-input" type="password" id="input-password" placeholder="Contraseña" autocomplete="current-password">
+
+            <button class="btn-admin-primary" id="btn-login">
+                <span id="login-btn-text"><i class="fas fa-sign-in-alt me-2"></i>Ingresar</span>
+                <span id="login-spinner" style="display:none;"><i class="fas fa-circle-notch fa-spin me-2"></i>Verificando...</span>
+            </button>
+
+            <p style="text-align:center; margin-top:20px;">
+                <a href="index.html" style="color:#c58aa0; font-size:0.82rem; text-decoration:none;">
+                    <i class="fas fa-arrow-left me-1"></i>Volver al sitio
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL PRINCIPAL
+    ══════════════════════════════════════════ -->
+    <div class="admin-wrapper" id="admin-panel">
+
+        <!-- Navbar -->
+        <nav class="admin-navbar">
+            <div class="admin-brand">
+                <i class="fas fa-heartbeat me-2"></i>Eje Salud
+                <span>Panel Admin</span>
+            </div>
+            <div class="admin-user">
+                <i class="fas fa-user-circle" style="color:#c58aa0; font-size:1.1rem;"></i>
+                <span id="admin-nombre">Admin</span>
+                <button class="btn-logout" id="btn-logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>Salir
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido -->
+        <div class="admin-content">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="fas fa-user-md me-2" style="color:#c58aa0;"></i>Médicos</h2>
+                    <button class="btn-nuevo" id="btn-nuevo-medico">
+                        <i class="fas fa-plus"></i> Nuevo médico
+                    </button>
+                </div>
+
+                <!-- Estado cargando -->
+                <div id="tabla-loading" class="table-loading">
+                    <i class="fas fa-circle-notch fa-spin me-2"></i>Cargando médicos...
+                </div>
+
+                <!-- Estado vacío -->
+                <div id="tabla-empty" class="table-empty" style="display:none;">
+                    <i class="fas fa-user-md" style="font-size:2rem; display:block; margin-bottom:12px; color:#e8d5da;"></i>
+                    No hay médicos registrados aún.
+                </div>
+
+                <!-- Tabla -->
+                <div style="overflow-x:auto; display:none;" id="tabla-wrapper">
+                    <table class="admin-table" id="tabla-medicos">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Especialidad</th>
+                                <th>Cédula</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODAL — AGREGAR / EDITAR MÉDICO
+    ══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modal-medico">
+        <div class="modal-box">
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+            <h3 class="modal-title" id="modal-title">Nuevo médico</h3>
+
+            <div class="modal-error" id="modal-error">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="modal-error-text"></span>
+            </div>
+
+            <label class="form-label-admin">Nombre <span style="color:#e74c3c;">*</span></label>
+            <input class="form-input-admin" type="text" id="m-nombre" placeholder="Ej: Juan">
+
+            <label class="form-label-admin">Apellido <span style="color:#e74c3c;">*</span></label>
+            <input class="form-input-admin" type="text" id="m-apellido" placeholder="Ej: García López">
+
+            <label class="form-label-admin">Especialidad <span style="color:#e74c3c;">*</span></label>
+            <select class="form-input-admin" id="m-especialidad">
+                <option value="">Selecciona una especialidad</option>
+                <option>Médico General</option>
+                <option>Medicina Interna</option>
+                <option>Psicología</option>
+                <option>Podología</option>
+                <option>Radiología</option>
+            </select>
+
+            <label class="form-label-admin">Cédula profesional</label>
+            <input class="form-input-admin" type="text" id="m-cedula" placeholder="Ej: 1234567">
+
+            <label class="form-label-admin">Correo electrónico</label>
+            <input class="form-input-admin" type="email" id="m-email" placeholder="doctor@ejemplo.com">
+
+            <label class="form-label-admin">Teléfono</label>
+            <input class="form-input-admin" type="tel" id="m-telefono" placeholder="Ej: 55 1234 5678">
+
+            <div class="modal-actions">
+                <button class="btn-cancelar" id="modal-cancel-btn">Cancelar</button>
+                <button class="btn-admin-primary" id="btn-guardar-medico" style="width:auto; padding:10px 28px;">
+                    <span id="guardar-text"><i class="fas fa-save me-2"></i>Guardar</span>
+                    <span id="guardar-spinner" style="display:none;"><i class="fas fa-circle-notch fa-spin me-2"></i>Guardando...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODAL — CONFIRMAR ELIMINACIÓN
+    ══════════════════════════════════════════ -->
+    <div class="confirm-overlay" id="confirm-modal">
+        <div class="confirm-box">
+            <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h5>¿Desactivar médico?</h5>
+            <p id="confirm-text">Esta acción desactivará al médico y ya no aparecerá disponible para citas.</p>
+            <div class="confirm-actions">
+                <button class="btn-cancelar" id="confirm-cancel">Cancelar</button>
+                <button class="btn-confirm-delete" id="confirm-ok">
+                    <i class="fas fa-trash me-2"></i>Sí, desactivar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Configuración ─────────────────────────────────────────────
+        const API = 'http://localhost:5000/api';
+
+        // ── Estado ────────────────────────────────────────────────────
+        let token = null;
+        let editandoId = null;
+        let eliminandoId = null;
+
+        // ── Helpers ───────────────────────────────────────────────────
+        const $ = id => document.getElementById(id);
+
+        function authHeaders() {
+            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+        }
+
+        function showLoginError(msg) {
+            $('login-error-text').textContent = msg;
+            $('login-error').style.display = 'block';
+        }
+
+        function hideLoginError() { $('login-error').style.display = 'none'; }
+
+        function showModalError(msg) {
+            $('modal-error-text').textContent = msg;
+            $('modal-error').style.display = 'block';
+        }
+
+        function hideModalError() { $('modal-error').style.display = 'none'; }
+
+        // ── PASO 2: Login ─────────────────────────────────────────────
+        $('btn-login').addEventListener('click', async () => {
+            hideLoginError();
+            const email = $('input-email').value.trim();
+            const password = $('input-password').value.trim();
+
+            if (!email || !password) {
+                showLoginError('Por favor ingresa tu correo y contraseña.');
+                return;
+            }
+
+            $('login-btn-text').style.display = 'none';
+            $('login-spinner').style.display = 'inline';
+            $('btn-login').disabled = true;
+
+            try {
+                const res = await fetch(`${API}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.mensaje || data.message || 'Credenciales inválidas.');
+                if (data.usuario?.rol !== 'admin') throw new Error('No tienes permisos de administrador.');
+
+                token = data.token;
+                localStorage.setItem('admin_token', token);
+                localStorage.setItem('admin_nombre', data.usuario.nombre || email);
+
+                entrarAlPanel(data.usuario.nombre || email);
+
+            } catch (err) {
+                showLoginError(err.message);
+                $('login-btn-text').style.display = 'inline';
+                $('login-spinner').style.display = 'none';
+                $('btn-login').disabled = false;
+            }
+        });
+
+        // Enter en inputs dispara el login
+        [$('input-email'), $('input-password')].forEach(el => {
+            el.addEventListener('keydown', e => { if (e.key === 'Enter') $('btn-login').click(); });
+        });
+
+        // ── Entrar al panel ───────────────────────────────────────────
+        function entrarAlPanel(nombre) {
+            $('login-screen').style.display = 'none';
+            $('admin-panel').style.display = 'flex';
+            $('admin-nombre').textContent = nombre;
+            cargarMedicos();
+        }
+
+        // ── PASO 3: Cargar tabla de médicos ───────────────────────────
+        async function cargarMedicos() {
+            $('tabla-loading').style.display = 'block';
+            $('tabla-wrapper').style.display = 'none';
+            $('tabla-empty').style.display = 'none';
+
+            try {
+                const res = await fetch(`${API}/medicos`, {
+                    headers: authHeaders()
+                });
+
+                if (res.status === 401) { cerrarSesion(); return; }
+
+                const data = await res.json();
+                const medicos = data.medicos || data;
+
+                $('tabla-loading').style.display = 'none';
+
+                if (!medicos.length) {
+                    $('tabla-empty').style.display = 'block';
+                    return;
+                }
+
+                $('tabla-wrapper').style.display = 'block';
+                renderTabla(medicos);
+
+            } catch (err) {
+                $('tabla-loading').innerHTML = `<i class="fas fa-exclamation-circle me-2" style="color:#e74c3c;"></i>${err.message}`;
+            }
+        }
+
+        function renderTabla(medicos) {
+            $('tabla-body').innerHTML = medicos.map(m => `
+                <tr>
+                    <td><strong>Dr. ${m.nombre} ${m.apellido || ''}</strong></td>
+                    <td>${m.especialidad}</td>
+                    <td>${m.cedula || '—'}</td>
+                    <td>${m.email || '—'}</td>
+                    <td>
+                        <span class="${m.activo !== false ? 'badge-activo' : 'badge-inactivo'}">
+                            ${m.activo !== false ? 'Activo' : 'Inactivo'}
+                        </span>
+                    </td>
+                    <td style="display:flex; gap:6px;">
+                        <button class="btn-tbl btn-tbl-edit" onclick="abrirEditar('${m._id}')">
+                            <i class="fas fa-pen me-1"></i>Editar
+                        </button>
+                        <button class="btn-tbl btn-tbl-delete" onclick="pedirConfirmacion('${m._id}', '${m.nombre} ${m.apellido || ''}')">
+                            <i class="fas fa-ban me-1"></i>Desactivar
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ── PASO 4: Abrir modal nuevo médico ──────────────────────────
+        $('btn-nuevo-medico').addEventListener('click', () => {
+            editandoId = null;
+            $('modal-title').textContent = 'Nuevo médico';
+            limpiarModal();
+            abrirModal();
+        });
+
+        function limpiarModal() {
+            ['m-nombre','m-apellido','m-cedula','m-email','m-telefono'].forEach(id => $( id).value = '');
+            $('m-especialidad').value = '';
+            hideModalError();
+        }
+
+        function abrirModal() { $('modal-medico').classList.add('open'); }
+        function cerrarModal() { $('modal-medico').classList.remove('open'); }
+
+        $('modal-close-btn').addEventListener('click', cerrarModal);
+        $('modal-cancel-btn').addEventListener('click', cerrarModal);
+
+        // Cerrar al hacer clic fuera
+        $('modal-medico').addEventListener('click', e => {
+            if (e.target === $('modal-medico')) cerrarModal();
+        });
+
+        // ── PASO 4: Guardar médico (crear o editar) ───────────────────
+        $('btn-guardar-medico').addEventListener('click', async () => {
+            hideModalError();
+
+            const nombre = $('m-nombre').value.trim();
+            const apellido = $('m-apellido').value.trim();
+            const especialidad = $('m-especialidad').value;
+
+            if (!nombre || !apellido) { showModalError('Nombre y apellido son obligatorios.'); return; }
+            if (!especialidad) { showModalError('Selecciona una especialidad.'); return; }
+
+            const payload = {
+                nombre,
+                apellido,
+                especialidad,
+                cedula: $('m-cedula').value.trim() || undefined,
+                email: $('m-email').value.trim() || undefined,
+                telefono: $('m-telefono').value.trim() || undefined,
+            };
+
+            $('guardar-text').style.display = 'none';
+            $('guardar-spinner').style.display = 'inline';
+            $('btn-guardar-medico').disabled = true;
+
+            try {
+                const url = editandoId ? `${API}/medicos/${editandoId}` : `${API}/medicos`;
+                const method = editandoId ? 'PUT' : 'POST';
+
+                const res = await fetch(url, {
+                    method,
+                    headers: authHeaders(),
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.mensaje || data.message || 'Error al guardar.');
+
+                cerrarModal();
+                cargarMedicos();
+
+            } catch (err) {
+                showModalError(err.message);
+            } finally {
+                $('guardar-text').style.display = 'inline';
+                $('guardar-spinner').style.display = 'none';
+                $('btn-guardar-medico').disabled = false;
+            }
+        });
+
+        // ── PASO 5: Abrir modal editar ────────────────────────────────
+        async function abrirEditar(id) {
+            editandoId = id;
+            $('modal-title').textContent = 'Editar médico';
+            limpiarModal();
+            abrirModal();
+
+            try {
+                const res = await fetch(`${API}/medicos/${id}`, { headers: authHeaders() });
+                const data = await res.json();
+                const m = data.medico || data;
+
+                $('m-nombre').value = m.nombre || '';
+                $('m-apellido').value = m.apellido || '';
+                $('m-especialidad').value = m.especialidad || '';
+                $('m-cedula').value = m.cedula || '';
+                $('m-email').value = m.email || '';
+                $('m-telefono').value = m.telefono || '';
+            } catch (err) {
+                showModalError('No se pudo cargar la información del médico.');
+            }
+        }
+
+        // ── PASO 6: Confirmar y desactivar ────────────────────────────
+        function pedirConfirmacion(id, nombre) {
+            eliminandoId = id;
+            $('confirm-text').textContent = `Se desactivará a Dr. ${nombre}. Ya no aparecerá disponible para citas.`;
+            $('confirm-modal').classList.add('open');
+        }
+
+        $('confirm-cancel').addEventListener('click', () => {
+            $('confirm-modal').classList.remove('open');
+            eliminandoId = null;
+        });
+
+        $('confirm-ok').addEventListener('click', async () => {
+            if (!eliminandoId) return;
+            $('confirm-modal').classList.remove('open');
+
+            try {
+                const res = await fetch(`${API}/medicos/${eliminandoId}`, {
+                    method: 'DELETE',
+                    headers: authHeaders()
+                });
+
+                if (!res.ok) throw new Error('No se pudo desactivar al médico.');
+                cargarMedicos();
+
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                eliminandoId = null;
+            }
+        });
+
+        // ── PASO 7: Logout y protección de ruta ──────────────────────
+        function cerrarSesion() {
+            token = null;
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_nombre');
+            $('admin-panel').style.display = 'none';
+            $('login-screen').style.display = 'flex';
+            $('input-email').value = '';
+            $('input-password').value = '';
+        }
+
+        $('btn-logout').addEventListener('click', cerrarSesion);
+
+        // ── Inicializar: revisar si ya hay sesión activa ──────────────
+        (function init() {
+            const savedToken = localStorage.getItem('admin_token');
+            const savedNombre = localStorage.getItem('admin_nombre');
+            if (savedToken) {
+                token = savedToken;
+                entrarAlPanel(savedNombre || 'Admin');
+            }
+        })();
+    </script>
+</body>
+</html>
