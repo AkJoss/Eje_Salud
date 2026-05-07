@@ -554,7 +554,7 @@
                         <span>Motivo:</span> ${cita.motivo}
                     </div>
                     ${puedeCancelar ? `
-                    <button class="btn-cancelar" onclick="abrirModalCancelar('${cita._id}', '${cita.especialidad}', '${cita.hora}')">
+                    <button class="btn-cancelar" onclick="abrirModalCancelar('${cita.id}', '${cita.especialidad}', '${cita.hora}')">
                         <i class="fas fa-times me-1"></i>Cancelar cita
                     </button>` : ''}
                 </div>`;
@@ -583,9 +583,14 @@
                 todasLasCitas = data.citas;
 
                 // Ocultar skeletons
-                document.getElementById('skeletons').style.display = 'none';
-                document.getElementById('filtros').style.display = 'flex';
-                document.getElementById('btn-nueva-cita').style.display = 'block';
+                // Ocultar skeletons (solo si existen)
+                const skeletons = document.getElementById('skeletons');
+                const filtros = document.getElementById('filtros');
+                const btnNueva = document.getElementById('btn-nueva-cita');
+
+                if (skeletons) skeletons.style.display = 'none';
+                if (filtros) filtros.style.display = 'flex';
+                if (btnNueva) btnNueva.style.display = 'block';
 
                 // Admin: cambiar título
                 if (Auth.isAdmin()) {

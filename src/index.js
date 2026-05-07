@@ -54,7 +54,7 @@ const iniciarServidor = async () => {
   try {
     await connectDB();
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('Tablas sincronizadas correctamente');
 
     app.listen(PORT, () => {

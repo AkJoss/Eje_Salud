@@ -989,8 +989,8 @@
 
                 list.innerHTML = medicos.map(m => `
                     <div class="medico-option">
-                        <input type="radio" name="medico" id="med-${m._id}" value="${m._id}" data-nombre="Dr. ${m.nombre} ${m.apellido}">
-                        <label for="med-${m._id}" class="medico-label">
+                        <input type="radio" name="medico" id="med-${m.id}" value="${m.id}" data-nombre="Dr. ${m.nombre} ${m.apellido}">
+                        <label for="med-${m.id}" class="medico-label">
                             <div class="medico-avatar-sm"><i class="fas fa-user-md"></i></div>
                             <div class="medico-label-info">
                                 <h6>Dr. ${m.nombre} ${m.apellido}</h6>
